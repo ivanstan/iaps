@@ -1,25 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Map } from './components/Map';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Map containerElement={<div/>}
+         mapElement={<div style={{ height: window.innerHeight - 15, width: window.innerWidth -15 }}/>}
+         googleMapURL={'https://maps.googleapis.com/maps/api/js?key=AIzaSyCoPqCC8XT2kwShwfCms3xk6JE2d-LT9_o&libraries=visualization'}
+         loadingElement={<div style={{ height: `100%` }}/>}
+    />
   );
 }
 
