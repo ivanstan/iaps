@@ -1,79 +1,40 @@
 import React from "react"
-import { GoogleMap, withGoogleMap, withScriptjs } from "react-google-maps"
-import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer";
+import { GoogleMap, withGoogleMap } from "react-google-maps"
 
 interface MapPropsInterface {
   zoom?: number
+  onZoomChange?: Function
 }
 
-interface MapStateInterface {
-  zoom: number,
-  data: any[],
-  radius: number,
-}
-
-class CustomGoogleMap extends React.Component<MapPropsInterface, MapStateInterface> {
-
-  private static RESOLUTION = 12000;
-
-  public state = {
-    data: [],
-    zoom: 8,
-    radius: 24,
-  }
+class CustomGoogleMap extends React.Component<MapPropsInterface> {
 
   private _map: any
 
-  async componentDidMount() {
-    let data: any = await fetch('/data.json')
-    data = await data.json()
-
-    const array: any[] = []
-    for (let i in data) {
-      array.push({
-        location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
-        weight: data[i].temperature
-      })
-    }
-
-    this.setState({
-      data: array,
-      zoom: this.props.zoom || 8,
-    })
-  }
-
   onZoomChange = () => {
-    this.setState({
-      zoom: this._map.getZoom(),
-      radius: this.getHeatMapRadius(CustomGoogleMap.RESOLUTION),
-    });
-  };
+    const { onZoomChange } = this.props
+    const latitude = this._map.getCenter().lat();
 
-  getHeatMapRadius(resolution: number) {
-    const latitude = this._map.getCenter().lat()
     const meterPerPixel = 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, this._map.getZoom());
 
-    return resolution / meterPerPixel;
-  }
+    if (onZoomChange) {
+      onZoomChange(meterPerPixel, this._map.getZoom())
+    }
+  };
 
   render() {
-    let { zoom, radius } = this.state
+    let { zoom, children } = this.props
 
     return (
       <GoogleMap
         ref={(map) => this._map = map}
         onZoomChanged={this.onZoomChange}
-        defaultZoom={zoom}
+        defaultZoom={zoom || 8}
         defaultCenter={{ lat: 44.8125, lng: 20.4612 }}
       >
-        {this.props.children}
-        <HeatmapLayer
-          data={this.state.data}
-          options={{ radius: radius, opacity: .4 }}
-        />
+        {children}
       </GoogleMap>
     )
   }
 }
 
-export const Map = withScriptjs(withGoogleMap(CustomGoogleMap))
+export const Map = withGoogleMap(CustomGoogleMap)
