@@ -13,14 +13,15 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
-    let data: any = await fetch('/data.json')
+    let data: any = await fetch('http://127.0.0.1:8000/')
+
     data = await data.json()
 
     const array: any[] = []
     for (let i in data) {
       array.push({
         location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
-        weight: data[i].temperature
+        weight: data[i].value
       })
     }
 
