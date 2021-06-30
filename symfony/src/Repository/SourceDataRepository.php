@@ -40,6 +40,7 @@ class SourceDataRepository extends ServiceEntityRepository
     public function getData(): array
     {
         return $this->createQueryBuilder('s')
+            ->select('s.latitude', 's.longitude', 's.value')
             ->getQuery()
             ->getArrayResult();
     }
