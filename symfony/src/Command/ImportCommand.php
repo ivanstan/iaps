@@ -4,16 +4,17 @@ namespace App\Command;
 
 use App\Entity\Import;
 use App\Entity\Index;
-use App\Entity\SourceData;
 use App\Entity\Source;
+use App\Entity\SourceData;
+use App\Service\StateService;
 use Doctrine\ORM\EntityManagerInterface;
+use Location\Coordinate;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'import',
@@ -23,7 +24,7 @@ class ImportCommand extends Command
 {
     private const BATCH_SIZE = 50;
 
-    public function __construct(protected EntityManagerInterface $entityManager)
+    public function __construct(protected EntityManagerInterface $entityManager, protected StateService $service)
     {
         parent::__construct();
     }
@@ -40,15 +41,17 @@ class ImportCommand extends Command
 //        $io = new SymfonyStyle($input, $output);
 //        $arg1 = $input->getArgument('arg1');
 //
-//        if ($arg1) {
-//            $io->note(sprintf('You passed an argument: %s', $arg1));
-//        }
-//
-//        if ($input->getOption('option1')) {
-//            // ...
-//        }
-//
-//        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        //        if ($arg1) {
+        //            $io->note(sprintf('You passed an argument: %s', $arg1));
+        //        }
+        //
+        //        if ($input->getOption('option1')) {
+        //            // ...
+        //        }
+        //
+        //        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+
+        $polygon = $this->service->setUp();
 
         $import = new Import();
         $import->setDatetime(new \DateTime());
@@ -63,6 +66,11 @@ class ImportCommand extends Command
         if (!(($handle = fopen('./storage/idx_03_2021.csv', 'rb')) === false)) {
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 if ($row === 1) {
+                    $row++;
+                    continue;
+                }
+
+                if (!$polygon->contains(new Coordinate($data[0], $data[1]))) {
                     $row++;
                     continue;
                 }

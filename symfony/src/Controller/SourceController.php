@@ -15,10 +15,6 @@ class SourceController extends AbstractController
     {
         $test = $repository->getData();
 
-        $service->setUp();
-
-
-
         return new JsonResponse($test);
     }
 }
