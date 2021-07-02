@@ -1,5 +1,6 @@
 import React from "react"
 import { GoogleMap, withGoogleMap } from "react-google-maps"
+import { settings } from "../settings";
 
 interface MapPropsInterface {
   zoom?: number
@@ -21,6 +22,19 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
     }
   };
 
+  onClick = async (event: any) => {
+    let lat = event.latLng.lat()
+    let lng = event.latLng.lng()
+
+    let params = new URLSearchParams({
+      latitude: lat,
+      longitude: lng
+    });
+
+    await fetch(settings.api + 'find?' + params.toString());
+
+  }
+
   render() {
     let { zoom, children } = this.props
 
@@ -30,6 +44,7 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
         onZoomChanged={this.onZoomChange}
         defaultZoom={zoom || 8}
         defaultCenter={{ lat: 44.8125, lng: 20.4612 }}
+        onClick={this.onClick}
       >
         {children}
       </GoogleMap>

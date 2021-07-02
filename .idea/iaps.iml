@@ -62,6 +62,7 @@
       <excludeFolder url="file://$MODULE_DIR$/symfony/vendor/doctrine/deprecations" />
       <excludeFolder url="file://$MODULE_DIR$/symfony/vendor/doctrine/persistence" />
       <excludeFolder url="file://$MODULE_DIR$/symfony/vendor/doctrine/sql-formatter" />
+      <excludeFolder url="file://$MODULE_DIR$/symfony/vendor/beberlei/doctrineextensions" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

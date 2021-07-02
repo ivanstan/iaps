@@ -2,7 +2,7 @@ import React from "react";
 
 class Legend extends React.Component<any, any> {
 
-  private state = {
+  public state = {
     data: []
   }
 
@@ -43,7 +43,7 @@ class Legend extends React.Component<any, any> {
     }
     gradientCss += ')';
 
-    const gradientStyle = {
+    const gradientStyle: any = {
       height: 10,
       width: '100%',
       background: 'linear-gradient' + gradientCss,

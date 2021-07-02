@@ -24,7 +24,7 @@ class App extends React.Component {
     "rgba(255, 0, 0, 1)"
   ];
 
-  private state = {
+  public state = {
     data: [],
     zoom: 8,
     radius: 24,
