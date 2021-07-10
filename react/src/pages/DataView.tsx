@@ -8,6 +8,7 @@ import Legend from "../components/Legend";
 import { KeyboardDatePicker, } from '@material-ui/pickers';
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
+import { If } from "react-if";
 
 const options = {
   maintainAspectRatio: true,
@@ -43,7 +44,7 @@ export default class DataView extends React.Component {
 
   private static RESOLUTION = 12000;
 
-  private static MAX_INTENSITY = 3;
+  private static MAX_INTENSITY = 4;
 
   private static GRADIENT = [
     "rgba(102, 255, 0, 0)",
@@ -59,7 +60,7 @@ export default class DataView extends React.Component {
     "rgba(255, 0, 0, 1)"
   ];
 
-  public state = {
+  public state: any = {
     data: [],
     zoom: 8,
     radius: 24,
@@ -68,6 +69,7 @@ export default class DataView extends React.Component {
     open: false,
     date: new Date(),
     dimenstion: null,
+    position: null,
   }
 
   onDateChange = (date: any) => {
@@ -117,12 +119,13 @@ export default class DataView extends React.Component {
 
     // await fetch(settings.api + 'find?' + params.toString());
 
-    this.setState({ open: true });
+    this.setState({ open: true, position: postion });
 
     this.sideBar.current.open();
   };
 
   render() {
+    // @ts-ignore
     return (
       <>
         <MainMenu/>
@@ -181,6 +184,10 @@ export default class DataView extends React.Component {
           <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>
 
           <div style={{ flexGrow: 1 }}/>
+
+          <If condition={this.state.position}>
+            <span>{`Current position ${this.state.position?.lat.toFixed(2) } ${this.state.position?.lng.toFixed(2) }`}</span>
+          </If>
 
           <Line
             type="line"
