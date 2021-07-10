@@ -50,23 +50,25 @@ class Legend extends React.Component<any, any> {
       position: 'relative'
     };
 
-    return <div style={gradientStyle} ref={(ref) => this.legend = ref}>
-      {data.map((item: any, index: number) => (
-        <div key={index} style={{
-          position: 'absolute',
-          left: item.offset,
-          top: '15px',
-          width: '1px',
-          height: '3px',
-          background: 'black'
-        }}>
-          <div style={{
-            left: -3,
-            position: 'relative',
-            top: 5
-          }}>{item.title}</div>
-        </div>
-      ))}
+    return <div style={{ height: 30 }}>
+      <div style={gradientStyle} ref={(ref) => this.legend = ref}>
+        {data.map((item: any, index: number) => (
+          <div key={index} style={{
+            position: 'absolute',
+            left: item.offset,
+            top: '15px',
+            width: '1px',
+            height: '3px',
+            background: 'black'
+          }}>
+            <div style={{
+              left: -3,
+              position: 'relative',
+              top: 5
+            }}>{item.title}</div>
+          </div>
+        ))}
+      </div>
     </div>
   }
 
