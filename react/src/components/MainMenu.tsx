@@ -30,9 +30,9 @@ export class MainMenu extends React.Component<any, any> {
   render() {
     const menu = (
       <>
-        <Button href={'#/'}>
-          Index
-        </Button>
+        {/*<Button href={'#/'}>*/}
+        {/*  Index*/}
+        {/*</Button>*/}
       </>
     )
 
@@ -40,14 +40,6 @@ export class MainMenu extends React.Component<any, any> {
         <AppBar position='static' elevation={0}>
           <Toolbar>
             <Logo src={'logo192.png'}/>
-            {/*<IconButton*/}
-            {/*  edge='start'*/}
-            {/*  color='inherit'*/}
-            {/*  aria-label='open drawer'*/}
-            {/*  onClick={this.toggleMenu}*/}
-            {/*  className={'d-block d-md-none'}*/}
-            {/*>*/}
-            {/*</IconButton>*/}
 
             <Button href={'#/'}>
               <Typography variant='h6'>

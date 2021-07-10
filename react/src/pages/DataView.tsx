@@ -26,8 +26,8 @@ let data = {
     label: 'Requests',
     data: [5, 10, 15, 20],
     borderWidth: 1,
-    borderColor: 'rgba(53, 134, 77, 1)',
-    backgroundColor: 'rgba(53, 134, 77, 0.2)',
+    borderColor: '#25afb4',
+    backgroundColor: '#25afb4',
   }]
 }
 
@@ -150,10 +150,8 @@ export default class DataView extends React.Component {
         </Map>
 
         <SideBar open={this.state.open} ref={this.sideBar}>
-          <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>
 
           <KeyboardDatePicker
-            style={{width: '100%'}}
             margin="normal"
             id="date-picker-dialog"
             label="Date"
@@ -166,7 +164,7 @@ export default class DataView extends React.Component {
             }}
           />
 
-          <FormControl style={{width: '100%'}}>
+          <FormControl>
             <InputLabel id="demo-simple-select-label">Dimension</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -178,15 +176,18 @@ export default class DataView extends React.Component {
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
-
-            <Line
-              type="line"
-              data={data}
-              height={250}
-              options={options}
-            />
-
           </FormControl>
+
+          <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>
+
+          <div style={{ flexGrow: 1 }}/>
+
+          <Line
+            type="line"
+            data={data}
+            height={250}
+            options={options}
+          />
 
         </SideBar>
       </>
