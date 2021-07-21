@@ -35,4 +35,14 @@ class Kernel extends BaseKernel
             $routes->import('../etc/{routes}.php');
         }
     }
+
+    public function registerBundles(): iterable
+    {
+        $contents = require $this->getProjectDir().'/etc/bundles.php';
+        foreach ($contents as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
+            }
+        }
+    }
 }
