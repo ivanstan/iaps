@@ -13,14 +13,7 @@ set('default_stage', 'production');
 set('bin/composer', '~/bin/composer.phar');
 set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --optimize-autoloader');
 add('shared_files', [
-    '.env',
-    'public/robots.txt',
-    'public/manifest.json',
-    'public/asset-manifest.json',
-    'public/favicon.ico',
-    'public/index.html',
-    'public/logo192.png',
-    'public/logo512.png',
+    '.env.local',
 ]);
 add('shared_dirs', [
     'var',
