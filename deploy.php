@@ -17,8 +17,6 @@ add('shared_files', [
 ]);
 add('shared_dirs', [
     'var',
-    'public/static',
-    'public/images',
 ]);
 add('writable_dirs', ['var']);
 
