@@ -54,7 +54,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "deploy": "bin/deploy.sh"
     },
     "conflict": {
         "symfony/symfony": "*"
