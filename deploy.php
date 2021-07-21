@@ -49,7 +49,6 @@ task(
         'deploy:assets',
         'deploy:writable',
         'deploy:vendors',
-        'deploy:cache:clear',
         'deploy:cache:warmup',
         'deploy:dump-env',
         'database:migrate',
