@@ -3,7 +3,7 @@ set -e
 
 # Backend
 
-#dep deploy
+dep deploy
 
 # Front end
 
