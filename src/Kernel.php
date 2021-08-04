@@ -3,38 +3,17 @@
 namespace App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    protected function configureContainer(ContainerConfigurator $container): void
-    {
-        $container->import('../etc/{packages}/*.yaml');
-        $container->import('../etc/{packages}/'.$this->environment.'/*.yaml');
-
-        if (is_file(\dirname(__DIR__).'/etc/services.yaml')) {
-            $container->import('../etc/services.yaml');
-            $container->import('../etc/{services}_'.$this->environment.'.yaml');
-        } else {
-            $container->import('../etc/{services}.php');
-        }
-    }
-
-    protected function configureRoutes(RoutingConfigurator $routes): void
-    {
-        $routes->import('../etc/{routes}/'.$this->environment.'/*.yaml');
-        $routes->import('../etc/{routes}/*.yaml');
-
-        if (is_file(\dirname(__DIR__).'/etc/routes.yaml')) {
-            $routes->import('../etc/routes.yaml');
-        } else {
-            $routes->import('../etc/{routes}.php');
-        }
-    }
+    private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
     public function registerBundles(): iterable
     {
@@ -44,5 +23,32 @@ class Kernel extends BaseKernel
                 yield new $class();
             }
         }
+    }
+
+    public function getProjectDir(): string
+    {
+        return \dirname(__DIR__);
+    }
+
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    {
+        $container->addResource(new FileResource($this->getProjectDir().'/etc/bundles.php'));
+        $container->setParameter('container.dumper.inline_class_loader', \PHP_VERSION_ID < 70400 || $this->debug);
+        $container->setParameter('container.dumper.inline_factories', true);
+        $confDir = $this->getProjectDir().'/etc';
+
+        $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
+    }
+
+    protected function configureRoutes(RouteCollectionBuilder $routes): void
+    {
+        $confDir = $this->getProjectDir().'/etc';
+
+        $routes->import($confDir.'/{routes}/'.$this->environment.'/*'.self::CONFIG_EXTS, '/', 'glob');
+        $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
+        $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
 }
