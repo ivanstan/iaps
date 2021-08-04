@@ -15,10 +15,6 @@ set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progre
 add('shared_files', [
     '.env.local',
 ]);
-add('shared_dirs', [
-    'var',
-]);
-add('writable_dirs', ['var']);
 
 host('ivanstanojevic.me')
     ->user('glutenfr')
