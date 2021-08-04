@@ -42,8 +42,7 @@
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "psr/container": "1.*"
+        "symfony/polyfill-php72": "*"
     },
     "scripts": {
         "auto-scripts": {
