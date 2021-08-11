@@ -1,5 +1,5 @@
 import React from "react"
-import { AppBar, Drawer, IconButton, Toolbar } from "@material-ui/core"
+import { AppBar, Drawer, IconButton, Toolbar, Typography, withStyles } from "@material-ui/core"
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import styled from "styled-components";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -17,15 +17,31 @@ const Container = styled.div`
 
 `;
 
+const drawerWidth = 440;
+
 const Content = styled.div`
   padding: 20px;
-  width: 400px;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 104px);
 `;
 
-export default class SideBar extends React.Component<any, any> {
+const styles: any = (theme: any) => ({
+  drawerPaper: {
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  showMap: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  }
+})
+
+export class SideBar extends React.Component<any, any> {
 
   public readonly state = {
     isOpen: true
@@ -40,6 +56,8 @@ export default class SideBar extends React.Component<any, any> {
   }
 
   render() {
+    const { classes } = this.props
+
     return <>
       <Drawer
         variant="persistent"
@@ -47,6 +65,9 @@ export default class SideBar extends React.Component<any, any> {
         open={this.state.isOpen}
         onClose={this.toggle}
         BackdropProps={{ invisible: true }}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
       >
         <Container>
           <AppBar position='static' elevation={0} style={{ background: "transparent" }}>
@@ -54,6 +75,7 @@ export default class SideBar extends React.Component<any, any> {
               <IconButton onClick={this.toggle}>
                 <ChevronRightIcon/>
               </IconButton>
+              <Typography className={classes.showMap}>Show map</Typography>
             </Toolbar>
           </AppBar>
           <Content>
@@ -74,3 +96,5 @@ export default class SideBar extends React.Component<any, any> {
     </>
   }
 }
+
+export default withStyles(styles)(SideBar)
