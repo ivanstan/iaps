@@ -44,7 +44,7 @@ const styles: any = (theme: any) => ({
 export class SideBar extends React.Component<any, any> {
 
   public readonly state = {
-    isOpen: true
+    isOpen: false
   }
 
   open = (isOpen: boolean = true) => {
@@ -75,7 +75,7 @@ export class SideBar extends React.Component<any, any> {
               <IconButton onClick={this.toggle}>
                 <ChevronRightIcon/>
               </IconButton>
-              <Typography className={classes.showMap}>Show map</Typography>
+              <Typography className={classes.showMap} onClick={this.toggle}>Show map</Typography>
             </Toolbar>
           </AppBar>
           <Content>

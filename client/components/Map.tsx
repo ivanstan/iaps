@@ -71,6 +71,10 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
     this.getHtml5Geolocation(null).then(position => {
       this.setState({ position: position })
 
+      this._map.setState({
+        center: position
+      });
+
       const { onClick } = this.props
 
       if (onClick) {
@@ -93,8 +97,8 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
           minZoom: 7,
           restriction: {
             latLngBounds: {
-              north: 48,
-              south: 40,
+              north: 50,
+              south: 38,
               west: 10,
               east: 40
             }
