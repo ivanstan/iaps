@@ -31,6 +31,10 @@ task('deploy:dump-env', function () {
     run('cd {{release_path}} && {{bin/composer}} dump-env prod');
 });
 
+task('deploy:executable', function () {
+    run('chmod +x bin/console');
+});
+
 task(
     'deploy',
     [
@@ -45,6 +49,7 @@ task(
         'deploy:assets',
         'deploy:writable',
         'deploy:vendors',
+        'deploy:executable',
         'deploy:cache:warmup',
         'deploy:dump-env',
         'database:migrate',
