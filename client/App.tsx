@@ -1,11 +1,14 @@
 import React from 'react'
-import { createTheme } from "@material-ui/core"
+import { Button, createTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
 import { HashRouter, Route, Switch } from "react-router-dom"
 import DataView from './pages/DataView'
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateUtils from "@date-io/moment";
 import moment from "moment";
+import { MainMenu } from "./components/MainMenu";
+import styled from "styled-components";
+import { If } from "react-if";
 
 const theme = createTheme({
   palette: {
@@ -18,17 +21,69 @@ const theme = createTheme({
   },
 })
 
-class App extends React.Component {
+let deferredPrompt: any;
+
+const InstallBar = styled.div`
+  background: red;
+  position: fixed;
+  height: 40px;
+  bottom: 0px;
+  width: 100%;
+`;
+
+class App extends React.Component<any, any> {
+
+  public readonly state = {
+    showInstall: false,
+  }
+
+  componentDidMount() {
+    window.addEventListener('beforeinstallprompt', (e) => {
+
+      // Prevent the mini-infobar from appearing on mobile
+      // e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      // Update UI notify the user they can install the PWA
+
+      this.setState({
+        showInstall: true
+      })
+    });
+  }
+
+  onInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    }
+
+    this.setState({
+      showInstall: false
+    })
+  }
 
   render() {
     return (
       <ThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateUtils} libInstance={moment}>
+          <MainMenu/>
           <HashRouter>
             <Switch>
               <Route path="/" exact component={DataView}/>
             </Switch>
           </HashRouter>
+
+          {/*<If condition={this.state.showInstall}>*/}
+          {/*  <InstallBar>*/}
+          {/*    <Button onClick={this.onInstallClick}>*/}
+          {/*      Install*/}
+          {/*    </Button>*/}
+          {/*  </InstallBar>*/}
+          {/*</If>*/}
+
         </MuiPickersUtilsProvider>
       </ThemeProvider>
     )

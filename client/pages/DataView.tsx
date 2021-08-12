@@ -128,7 +128,6 @@ export default class DataView extends React.Component {
     // @ts-ignore
     return (
       <>
-        <MainMenu/>
         <Map containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
              mapElement={<div style={{ height: '100%' }}/>}
              onZoomChange={this.onZoomChange}

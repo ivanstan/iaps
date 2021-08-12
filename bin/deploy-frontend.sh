@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Backend
-
-dep deploy
-
 # Front end
-
 DEPLOY_PATH=/home/glutenfr/projects/dev.ivanstanojevic.me/current/public
 HOST=ivanstanojevic.me
 USER=glutenfr
