@@ -33,7 +33,7 @@
         "psr-4": {
             "App\\": "src/"
         }
-    },dep deploy
+    },
     "autoload-dev": {
         "psr-4": {
             "App\\Tests\\": "tests/"
