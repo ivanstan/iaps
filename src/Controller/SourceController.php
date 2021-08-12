@@ -9,10 +9,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route("/api")]
 class SourceController extends AbstractController
 {
-    #[Route("/", name: "data")]
-    public function data(SourceDataRepository $repository, StateService $service)
+    #[Route("/data", name: "data")]
+    public function data(SourceDataRepository $repository, StateService $service): JsonResponse
     {
         $test = $repository->getData();
 
@@ -20,7 +21,7 @@ class SourceController extends AbstractController
     }
 
     #[Route("/find", name: "find")]
-    public function find(Request $request, SourceDataRepository $repository)
+    public function find(Request $request, SourceDataRepository $repository): JsonResponse
     {
         $test = $repository->getDetail((float)$request->get('latitude'), (float)$request->get('longitude'));
 

@@ -92,15 +92,15 @@ export default class DataView extends React.Component {
       })
     }
 
-    let state: any = await fetch('/serbia.geojson');
-    state = await state.json()
-    let coords: any = [];
+    // let state: any = await fetch('/serbia.geojson');
+    // state = await state.json()
+    // let coords: any = [];
     // state.features[0].geometry.coordinates[0][0].map((coord: any) => coords.push({lat: coord[1], lng: coord[0]}));
 
     this.setState({
       data: array,
       zoom: 8,
-      state: coords,
+      // state: coords,
     })
   }
 

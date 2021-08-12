@@ -63,7 +63,7 @@ class ImportCommand extends Command
         $date = new \DateTime();
 
         $row = 1;
-        if (!(($handle = fopen('./storage/idx_03_2021.csv', 'rb')) === false)) {
+        if (!(($handle = fopen('./static/data/idx_03_2021.csv', 'rb')) === false)) {
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 if ($row === 1) {
                     $row++;
