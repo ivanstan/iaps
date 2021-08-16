@@ -32,7 +32,7 @@ task('deploy:dump-env', function () {
 });
 
 task('deploy:executable', function () {
-    run('chmod +x bin/console');
+    run('chmod +x {{release_path}}/bin/console');
 });
 
 task(
