@@ -72,14 +72,12 @@ class ImportService
 
         $createdDate = new \DateTime();
         $createdDate->setDate($createdYear, $createdMonth, 0);
-        $createdDate->setTime(0, 0, 0);
 
         $targetYear = (int)substr($fileParts[2], 0, 4);
         $targetMonth = (int)substr($fileParts[2], 4, 2);
 
         $targetDate = new \DateTime();
         $targetDate->setDate($targetYear, $targetMonth, 0);
-        $targetDate->setTime(0, 0, 0);
 
         return [
             'source' => $fileParts[0],

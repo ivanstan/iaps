@@ -22,6 +22,18 @@ class SourceDataRepository extends ServiceEntityRepository
         parent::__construct($registry, SourceData::class);
     }
 
+    public function getInfo(string $name): array
+    {
+        return $this->createQueryBuilder('data')
+            ->select('DISTINCT data.createdDate, data.targetDate')
+            ->leftJoin('data.source', 'source')
+            ->where('source.name = :name')->setParameter('name', $name)
+            ->orderBy('data.createdDate', 'DESC')
+            ->addOrderBy('data.targetDate', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     public function getData(string $name, string $created, string $target): array
     {
         return $this->createQueryBuilder('data')

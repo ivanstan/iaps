@@ -20,12 +20,12 @@ class SourceData
     private int $id;
 
     /**
-     * @ORM\Column(type="datetime", name="target_date")
+     * @ORM\Column(type="date", name="target_date")
      */
     private \DateTimeInterface $targetDate;
 
     /**
-     * @ORM\Column(type="datetime", name="created_date")
+     * @ORM\Column(type="date", name="created_date")
      */
     private \DateTimeInterface $createdDate;
 
