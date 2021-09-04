@@ -9,16 +9,16 @@ class Legend extends React.Component<any, any> {
   private legend: any = null;
 
   componentDidMount() {
-    const { maxIntensity } = this.props;
+    const { maxIntensity, step } = this.props;
 
     let width = this.legend.clientWidth;
 
     let legend = [];
-    for (let i = 0; i <= maxIntensity; ++i) {
+    for (let i = 0; i <= maxIntensity; i += step || 1) {
       let offset = i * width / maxIntensity;
       if (i > 0 && i < maxIntensity) {
         offset -= 0.5;
-      } else if (i == maxIntensity) {
+      } else if (i === maxIntensity) {
         offset -= 1;
       }
 

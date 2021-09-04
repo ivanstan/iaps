@@ -7,6 +7,7 @@ import { KeyboardDatePicker, } from '@material-ui/pickers'
 import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
 import moment from "moment";
+import Legend from "../components/Legend"
 
 const options = {
   maintainAspectRatio: true,
@@ -254,8 +255,6 @@ export default class DataView extends React.Component {
           {/*  </Select>*/}
           {/*</FormControl>*/}
 
-          {/*<Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>*/}
-
           <div style={{ flexGrow: 1 }}/>
 
           <If condition={this.state.current}>
@@ -271,6 +270,8 @@ export default class DataView extends React.Component {
               {`Current position ${this.state.position?.lat.toFixed(2)} ${this.state.position?.lng.toFixed(2)}`}
             </span>
           </If>
+
+          <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT} step={5}/>
 
           {/*<Line*/}
           {/*  type="line"*/}
