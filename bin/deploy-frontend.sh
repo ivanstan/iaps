@@ -9,7 +9,7 @@ PORT=2233
 ARTIFACT_NAME=artifact-$(date '+%Y%m%d%H%M%S').tar.gz
 
 echo "yarn build"
-yarn build
+yarn build prod
 
 echo "create artifact"
 tar -czf "${ARTIFACT_NAME}" -C build .
