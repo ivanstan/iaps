@@ -5,10 +5,9 @@ import Polygon from "react-google-maps/lib/components/Polygon"
 import SideBar from "../components/SideBar"
 import Legend from "../components/Legend"
 import { KeyboardDatePicker, } from '@material-ui/pickers'
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core"
-import { Line } from "react-chartjs-2"
 import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
+import moment from "moment";
 
 const options = {
   maintainAspectRatio: true,
@@ -71,8 +70,9 @@ export default class DataView extends React.Component {
     open: false,
     created: new Date(),
     target: new Date(),
-    dimenstion: null,
+    dimension: null,
     position: null,
+    info: {}
   }
 
   async componentDidMount() {
@@ -80,43 +80,71 @@ export default class DataView extends React.Component {
 
     const info: any = await dataSource.info()
 
-    if (info.available.length > 0) {
-      this.setState({
-        created: info.available[0].created,
-        target: info.available[0].target
-      })
+    let state: any = {
+      zoom: 8,
+      info: info,
     }
 
-    this.getRemoteData()
+    if (Object.keys(info.available).length > 0) {
+      const keys = Object.keys(info.available)
+
+      state['createdMax'] = moment(keys[0])
+      state['createdMin'] = moment(keys[keys.length - 1])
+
+      state['created'] = moment(info.available[keys[0]][0].created)
+      state['target'] = moment(info.available[keys[0]][0].target)
+    }
+
+    this.setState(state)
+
+    await this.setTargetRestriction()
+    await this.getRemoteData()
 
     // let state: any = await fetch('/serbia.geojson')
     // state = await state.json()
     // let coords: any = []
     // state.features[0].geometry.coordinates[0][0].map((coord: any) => coords.push({lat: coord[1], lng: coord[0]}))
-
-    this.setState({
-      zoom: 8,
-    })
   }
 
-  onDateChange = (prop: string, value: any) => {
+  onDateChange = async (prop: string, value: any) => {
     let state: any = {}
-    state[prop] = value
+    state[prop] = value.endOf('month')
+
+    await this.setState(state)
+    await this.getRemoteData()
+
+    if (prop === 'created') {
+      await this.setTargetRestriction()
+    }
+  }
+
+  setTargetRestriction = () => {
+    const { info, created } = this.state
+
+    if (!info.hasOwnProperty('available')) {
+      return
+    }
+
+    const range = info.available[created.format('YYYY-MM-DD')]
+
+    const state: any = {}
+    state['targetMax'] = moment(range[0].target)
+    state['targetMin'] = moment(range[range.length - 1].target)
 
     this.setState(state)
-    this.getRemoteData()
   }
 
-  onDimensionChange = (value: any) => {
-    this.setState({ dimenstion: value })
-    this.getRemoteData()
+  onDimensionChange = async (value: any) => {
+    await this.setState({ dimenstion: value })
+    await this.getRemoteData()
   }
 
   getRemoteData = async () => {
+    const { created, target } = this.state;
     let dataSource = new DataSource(name)
 
     const array: any[] = []
-    let data: any = await dataSource.data(this.state.created, this.state.target)
+    let data: any = await dataSource.data(created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
     for (let i in data) {
       array.push({
         location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
@@ -154,6 +182,8 @@ export default class DataView extends React.Component {
   }
 
   render() {
+    const { createdMin, createdMax, targetMin, targetMax } = this.state
+
     // @ts-ignore
     return (
       <>
@@ -184,12 +214,14 @@ export default class DataView extends React.Component {
 
           <KeyboardDatePicker
             margin="normal"
-            id="date-picker-dialog"
+            id="created-picker-dialog"
             label="Created"
             format="MM/yyyy"
             views={["month", "year"]}
             value={this.state.created}
             onChange={(param) => this.onDateChange('created', param)}
+            maxDate={createdMax}
+            minDate={createdMin}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
@@ -197,11 +229,13 @@ export default class DataView extends React.Component {
 
           <KeyboardDatePicker
             margin="normal"
-            id="date-picker-dialog"
+            id="target-picker-dialog"
             label="Target"
             format="MM/yyyy"
             views={["month", "year"]}
             value={this.state.target}
+            maxDate={targetMax}
+            minDate={targetMin}
             onChange={(param) => this.onDateChange('target', param)}
             KeyboardButtonProps={{
               'aria-label': 'change date',

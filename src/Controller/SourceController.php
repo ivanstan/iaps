@@ -16,19 +16,8 @@ class SourceController extends AbstractController
         string $name,
         SourceDataRepository $repository
     ): JsonResponse {
-        $result = [];
-
-        foreach ($repository->getInfo($name) as $info) {
-            $result[] = [
-                'created' => $info['createdDate']->format('Y-m-d'),
-                'target' => $info['targetDate']->format('Y-m-d'),
-            ];
-        }
-
         return new JsonResponse(
-            [
-                'available' => $result,
-            ]
+            $repository->getInfo($name)
         );
     }
 

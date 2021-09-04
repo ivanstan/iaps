@@ -24,7 +24,7 @@ class SourceDataRepository extends ServiceEntityRepository
 
     public function getInfo(string $name): array
     {
-        return $this->createQueryBuilder('data')
+        $availableData = $this->createQueryBuilder('data')
             ->select('DISTINCT data.createdDate, data.targetDate')
             ->leftJoin('data.source', 'source')
             ->where('source.name = :name')->setParameter('name', $name)
@@ -32,6 +32,30 @@ class SourceDataRepository extends ServiceEntityRepository
             ->addOrderBy('data.targetDate', 'DESC')
             ->getQuery()
             ->getArrayResult();
+
+        $rangeData = $this->createQueryBuilder('data')
+            ->select('MIN(data.value) as min')
+            ->addSelect('MAX(data.value) as max')
+            ->leftJoin('data.source', 'source')
+            ->where('source.name = :name')->setParameter('name', $name)
+            ->getQuery()
+            ->getSingleResult();
+
+        $available = [];
+        foreach ($availableData as $item) {
+            $createdDate = $item['createdDate']->format('Y-m-d');
+
+            $available[$createdDate][] = [
+                'created' => $createdDate,
+                'target' => $item['targetDate']->format('Y-m-d'),
+            ];
+        }
+
+        return [
+            'available' => $available,
+            'min' => $rangeData['min'],
+            'max' => $rangeData['max'],
+        ];
     }
 
     public function getData(string $name, string $created, string $target): array

@@ -14,9 +14,6 @@ export class DataSource {
   }
 
   data = async (created: string, target: string) => {
-
-    console.log(created)
-
     let data: any = await fetch(settings.api + '/api/source/' + this._name + '/data?created=' + created + '&target=' + target)
 
     return await data.json();

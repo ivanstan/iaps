@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Button, Drawer, IconButton, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Button, Drawer, Toolbar, Typography } from '@material-ui/core'
 import styled from 'styled-components'
 
 const Menu = styled.div`
