@@ -22,7 +22,7 @@ class SourceController extends AbstractController
     }
 
 
-    #[Route("/source/{name}/data", name: "data")]
+    #[Route("/source/{name}/data", name: "source_data")]
     public function data(
         string $name,
         SourceDataRepository $repository,
@@ -33,13 +33,20 @@ class SourceController extends AbstractController
         );
     }
 
-    #[Route("/find", name: "find")]
+    #[Route("/source/{name}/point", name: "source_point")]
     public function find(
+        string $name,
         Request $request,
         SourceDataRepository $repository
     ): JsonResponse {
-        $test = $repository->getDetail((float)$request->get('latitude'), (float)$request->get('longitude'));
+        $data = $repository->getDetail(
+            $name,
+            (float)$request->get('latitude'),
+            (float)$request->get('longitude'),
+            $request->get('created'),
+            $request->get('target')
+        );
 
-        return new JsonResponse($test);
+        return new JsonResponse($data[0] ?? []);
     }
 }

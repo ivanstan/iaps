@@ -70,10 +70,32 @@ class SourceDataRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getDetail(float $latitude, float $longitude): array
+    public function getDetail(string $name, float $latitude, float $longitude, ?string $created, ?string $target): array
     {
-        return $this->createQueryBuilder('s')
-            ->select('s.latitude', 's.longitude', 's.value', $this->getDistanceQuery($latitude, $longitude))
+        $query = $this->createQueryBuilder('data')
+            ->select(
+                'data.latitude',
+                'data.longitude',
+                'data.value',
+                $this->getDistanceQuery($latitude, $longitude, 'data'),
+                'source.name',
+                'data.createdDate',
+                'data.targetDate'
+            )
+            ->leftJoin('data.source', 'source')
+            ->where('source.name = :name')->setParameter('name', $name);
+
+        if ($created !== null) {
+            $query->andWhere('data.createdDate = :created_date')->setParameter('created_date', $created);
+        }
+
+        if ($target !== null) {
+            $query->andWhere('data.targetDate = :target_date')->setParameter('target_date', $target);
+        }
+
+        $query->orderBy('distance', 'ASC');
+
+        return $query
             ->getQuery()
             ->getArrayResult();
     }

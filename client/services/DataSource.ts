@@ -18,4 +18,17 @@ export class DataSource {
 
     return await data.json();
   }
+
+  point = async (postion: any, created: string, target: string) => {
+    let params = new URLSearchParams({
+      latitude: postion.lat,
+      longitude: postion.lng,
+      created: created,
+      target: target
+    })
+
+    let data: any = await fetch(settings.api + '/api/source/' + this._name + '/point?' + params.toString())
+
+    return await data.json();
+  };
 }

@@ -3,7 +3,6 @@ import { Map } from "../components/Map"
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer"
 import Polygon from "react-google-maps/lib/components/Polygon"
 import SideBar from "../components/SideBar"
-import Legend from "../components/Legend"
 import { KeyboardDatePicker, } from '@material-ui/pickers'
 import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
@@ -45,7 +44,7 @@ export default class DataView extends React.Component {
 
   private static RESOLUTION = 12000
 
-  private static MAX_INTENSITY = 4
+  private static MAX_INTENSITY = 32
 
   private static GRADIENT = [
     "rgba(102, 255, 0, 0)",
@@ -72,7 +71,8 @@ export default class DataView extends React.Component {
     target: new Date(),
     dimension: null,
     position: null,
-    info: {}
+    info: {},
+    current: {},
   }
 
   async componentDidMount() {
@@ -169,20 +169,18 @@ export default class DataView extends React.Component {
       return null
     }
 
-    let params = new URLSearchParams({
-      latitude: postion.lat,
-      longitude: postion.lng
-    })
+    const { created, target } = this.state;
 
-    // await fetch(settings.api + 'find?' + params.toString())
+    let dataSource = new DataSource(name)
+    let data = await dataSource.point(postion, created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
 
-    this.setState({ open: true, position: postion })
+    this.setState({ open: true, position: postion, current: data })
 
     this.sideBar.current.open()
   }
 
   render() {
-    const { createdMin, createdMax, targetMin, targetMax } = this.state
+    const { createdMin, createdMax, targetMin, targetMax, current } = this.state
 
     // @ts-ignore
     return (
@@ -256,12 +254,22 @@ export default class DataView extends React.Component {
           {/*  </Select>*/}
           {/*</FormControl>*/}
 
-          <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>
+          {/*<Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT}/>*/}
+
+          <div style={{ flexGrow: 1 }}/>
+
+          <If condition={this.state.current}>
+            <span className={'current-value'}>
+              {current.value}
+            </span>
+          </If>
 
           <div style={{ flexGrow: 1 }}/>
 
           <If condition={this.state.position}>
-            <span>{`Current position ${this.state.position?.lat.toFixed(2) } ${this.state.position?.lng.toFixed(2) }`}</span>
+            <span className={'current-position'}>
+              {`Current position ${this.state.position?.lat.toFixed(2)} ${this.state.position?.lng.toFixed(2)}`}
+            </span>
           </If>
 
           {/*<Line*/}
