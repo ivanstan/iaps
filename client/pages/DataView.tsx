@@ -9,6 +9,7 @@ import { KeyboardDatePicker, } from '@material-ui/pickers';
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import { If } from "react-if";
+import { settings } from "../settings";
 
 const options = {
   maintainAspectRatio: true,
@@ -73,6 +74,9 @@ export default class DataView extends React.Component {
   }
 
   onDateChange = (date: any) => {
+
+    console.log(date.format('Y-m-d'));
+
     this.setState({ date: date })
   }
 
@@ -81,9 +85,21 @@ export default class DataView extends React.Component {
   }
 
   async componentDidMount() {
+    this.getRemoteData();
 
+    // let state: any = await fetch('/serbia.geojson');
+    // state = await state.json()
+    // let coords: any = [];
+    // state.features[0].geometry.coordinates[0][0].map((coord: any) => coords.push({lat: coord[1], lng: coord[0]}));
+
+    this.setState({
+      zoom: 8,
+    })
+  }
+
+  getRemoteData = async () => {
     const array: any[] = []
-    let data: any = await fetch('./data.json')
+    let data: any = await fetch(settings.api + '/api/source/medT?target=2017-01-31&created=2017-01-31')
     data = await data.json()
     for (let i in data) {
       array.push({
@@ -92,17 +108,10 @@ export default class DataView extends React.Component {
       })
     }
 
-    // let state: any = await fetch('/serbia.geojson');
-    // state = await state.json()
-    // let coords: any = [];
-    // state.features[0].geometry.coordinates[0][0].map((coord: any) => coords.push({lat: coord[1], lng: coord[0]}));
-
     this.setState({
       data: array,
-      zoom: 8,
-      // state: coords,
     })
-  }
+  };
 
   onZoomChange = (meterPerPixel: number) => {
     this.setState({
@@ -111,6 +120,10 @@ export default class DataView extends React.Component {
   }
 
   onClick = async (postion: any) => {
+
+    if (!postion) {
+      return null;
+    }
 
     let params = new URLSearchParams({
       latitude: postion.lat,

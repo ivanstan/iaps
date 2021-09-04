@@ -12,12 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route("/api")]
 class SourceController extends AbstractController
 {
-    #[Route("/data", name: "data")]
-    public function data(SourceDataRepository $repository, StateService $service): JsonResponse
+    #[Route("/source/{name}", name: "data")]
+    public function data(string $name, SourceDataRepository $repository, Request $request): JsonResponse
     {
-        $test = $repository->getData();
-
-        return new JsonResponse($test);
+        return new JsonResponse(
+            $repository->getData($name, $request->get('created'), $request->get('target'))
+        );
     }
 
     #[Route("/find", name: "find")]

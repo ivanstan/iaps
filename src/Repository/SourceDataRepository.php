@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Source;
 use App\Entity\SourceData;
 use App\Service\DistanceTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,27 +22,14 @@ class SourceDataRepository extends ServiceEntityRepository
         parent::__construct($registry, SourceData::class);
     }
 
-    // /**
-    //  * @return IndexData[] Returns an array of IndexData objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getData(string $name, string $created, string $target): array
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    public function getData(): array
-    {
-        return $this->createQueryBuilder('s')
-            ->select('s.latitude', 's.longitude', 's.value')
+        return $this->createQueryBuilder('data')
+            ->select('data.latitude', 'data.longitude', 'data.value')
+            ->leftJoin('data.source', 'source')
+            ->where('source.name = :name')->setParameter('name', $name)
+            ->andWhere('data.createdDate = :created_date')->setParameter('created_date', $created)
+            ->andWhere('data.targetDate = :target_date')->setParameter('target_date', $target)
             ->getQuery()
             ->getArrayResult();
     }
@@ -55,5 +41,4 @@ class SourceDataRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
-
 }
