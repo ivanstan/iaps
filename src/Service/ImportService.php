@@ -68,13 +68,13 @@ class ImportService
         $fileParts = explode('_', $file->getFilenameWithoutExtension());
 
         $createdYear = (int)substr($fileParts[1], 0, 4);
-        $createdMonth = (int)substr($fileParts[1], 4, 2);
+        $createdMonth = (int)substr($fileParts[1], 4, 2) + 1;
 
         $createdDate = new \DateTime();
         $createdDate->setDate($createdYear, $createdMonth, 0);
 
         $targetYear = (int)substr($fileParts[2], 0, 4);
-        $targetMonth = (int)substr($fileParts[2], 4, 2);
+        $targetMonth = (int)substr($fileParts[2], 4, 2) + 1;
 
         $targetDate = new \DateTime();
         $targetDate->setDate($targetYear, $targetMonth, 0);

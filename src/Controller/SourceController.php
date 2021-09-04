@@ -20,8 +20,8 @@ class SourceController extends AbstractController
 
         foreach ($repository->getInfo($name) as $info) {
             $result[] = [
-                'target' => $info['createdDate']->format('Y-m-d'),
-                'created' => $info['targetDate']->format('Y-m-d'),
+                'created' => $info['createdDate']->format('Y-m-d'),
+                'target' => $info['targetDate']->format('Y-m-d'),
             ];
         }
 
