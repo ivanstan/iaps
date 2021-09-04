@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Source;
 use App\Entity\SourceData;
 use App\Service\DistanceTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -39,7 +40,6 @@ class SourceDataRepository extends ServiceEntityRepository
     }
     */
 
-
     public function getData(): array
     {
         return $this->createQueryBuilder('s')
@@ -48,7 +48,8 @@ class SourceDataRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function getDetail(float $latitude, float $longitude): array {
+    public function getDetail(float $latitude, float $longitude): array
+    {
         return $this->createQueryBuilder('s')
             ->select('s.latitude', 's.longitude', 's.value', $this->getDistanceQuery($latitude, $longitude))
             ->getQuery()

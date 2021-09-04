@@ -15,7 +15,12 @@ class Import
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $filename;
 
     /**
      * @ORM\Column(type="datetime")
@@ -37,5 +42,15 @@ class Import
         $this->datetime = $datetime;
 
         return $this;
+    }
+
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\SourceDataRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=IndexDataRepository::class)
+ * @ORM\Entity()
  * @ORM\Table(name="`source_data`",indexes={
- *     @ORM\Index(name="source_idx", columns={"source_id", "datetime", "latitude", "longitude"})
+ *     @ORM\Index(name="source_idx", columns={"source_id", "created_date", "target_date", "latitude", "longitude"})
  * })
  */
 class SourceData
@@ -21,9 +20,14 @@ class SourceData
     private int $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", name="target_date")
      */
-    private \DateTimeInterface $datetime;
+    private \DateTimeInterface $targetDate;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_date")
+     */
+    private \DateTimeInterface $createdDate;
 
     /**
      * @ORM\Column(type="float")
@@ -55,18 +59,6 @@ class SourceData
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDatetime(): ?\DateTimeInterface
-    {
-        return $this->datetime;
-    }
-
-    public function setDatetime(\DateTimeInterface $datetime): self
-    {
-        $this->datetime = $datetime;
-
-        return $this;
     }
 
     public function getLatitude(): ?float
@@ -127,5 +119,37 @@ class SourceData
         $this->import = $import;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getCreatedDate(): \DateTimeInterface
+    {
+        return $this->createdDate;
+    }
+
+    /**
+     * @param \DateTimeInterface $createdDate
+     */
+    public function setCreatedDate(\DateTimeInterface $createdDate): void
+    {
+        $this->createdDate = $createdDate;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getTargetDate(): \DateTimeInterface
+    {
+        return $this->targetDate;
+    }
+
+    /**
+     * @param \DateTimeInterface $targetDate
+     */
+    public function setTargetDate(\DateTimeInterface $targetDate): void
+    {
+        $this->targetDate = $targetDate;
     }
 }

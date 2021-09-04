@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SourceRepository;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=SourceRepository::class)
  * @ORM\Table(name="`source`",indexes={
  *     @ORM\Index(name="name_idx", columns={"name"})
  * })
