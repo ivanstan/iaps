@@ -136,7 +136,7 @@ export default class DataView extends React.Component {
   }
 
   onDimensionChange = async (value: any) => {
-    await this.setState({ dimenstion: value })
+    await this.setState({ dimension: value })
     await this.getRemoteData()
   }
 
