@@ -3,6 +3,7 @@ import { GoogleMap, withGoogleMap } from "react-google-maps"
 import { If } from "react-if";
 import Marker from "react-google-maps/lib/components/Marker";
 import { styles } from "../styles";
+import { mapCenter, meterPerPixel } from "../services/util";
 
 interface MapPropsInterface {
   zoom?: number
@@ -48,10 +49,8 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
     const { onZoomChange } = this.props
     const latitude = this._map.getCenter().lat()
 
-    const meterPerPixel = 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, this._map.getZoom())
-
     if (onZoomChange) {
-      onZoomChange(meterPerPixel, this._map.getZoom())
+      onZoomChange(meterPerPixel(this._map.getZoom(), latitude), this._map.getZoom())
     }
   }
 
@@ -72,9 +71,11 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
     this.getHtml5Geolocation(null).then(position => {
       this.setState({ position: position })
 
-      this._map.setState({
-        center: position
-      });
+      if (this._map) {
+        this._map.setState({
+          center: position
+        });
+      }
 
       const { onClick } = this.props
 
@@ -92,7 +93,7 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
         ref={(map) => this._map = map}
         onZoomChanged={this.onZoomChange}
         defaultZoom={zoom || 8}
-        defaultCenter={{ lat: 43.8125, lng: 21.4612 }}
+        defaultCenter={mapCenter}
         onClick={this.onClick}
         options={{
           // styles: styles,

@@ -1,41 +1,41 @@
 import React from "react"
 import { Map } from "../components/Map"
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer"
-import Polygon from "react-google-maps/lib/components/Polygon"
 import SideBar from "../components/SideBar"
 import { KeyboardDatePicker, } from '@material-ui/pickers'
 import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
 import moment from "moment";
 import Legend from "../components/Legend"
+import { mapCenter, meterPerPixel } from "../services/util";
 
-const options = {
-  maintainAspectRatio: true,
-  title: {
-    display: true,
-    text: 'Number of requests in last three days'
-  },
-  legend: {
-    display: false,
-  },
-}
-
-let data = {
-  labels: [1, 2, 3, 4],
-  datasets: [{
-    label: 'Requests',
-    data: [5, 10, 15, 20],
-    borderWidth: 1,
-    borderColor: '#25afb4',
-    backgroundColor: '#25afb4',
-  }]
-}
+// const options = {
+//   maintainAspectRatio: true,
+//   title: {
+//     display: true,
+//     text: 'Number of requests in last three days'
+//   },
+//   legend: {
+//     display: false,
+//   },
+// }
+//
+// let data = {
+//   labels: [1, 2, 3, 4],
+//   datasets: [{
+//     label: 'Requests',
+//     data: [5, 10, 15, 20],
+//     borderWidth: 1,
+//     borderColor: '#25afb4',
+//     backgroundColor: '#25afb4',
+//   }]
+// }
 
 const name = 'medT'
 
 export default class DataView extends React.Component {
 
-  private sideBar: React.RefObject<any>
+  private readonly sideBar: React.RefObject<any>
 
   constructor(props: any) {
     super(props)
@@ -43,7 +43,7 @@ export default class DataView extends React.Component {
     this.sideBar = React.createRef()
   }
 
-  private static RESOLUTION = 16000
+  private static RESOLUTION = 15500
 
   private static MAX_INTENSITY = 32
 
@@ -64,8 +64,7 @@ export default class DataView extends React.Component {
   public state: any = {
     data: [],
     zoom: 8,
-    radius: 72.68,
-    state: [],
+    radius: null,
     legend: [],
     open: false,
     created: moment(),
@@ -77,13 +76,15 @@ export default class DataView extends React.Component {
   }
 
   async componentDidMount() {
-    let dataSource = new DataSource(name)
+    const { zoom } = this.state
 
+    let dataSource = new DataSource(name)
     const info: any = await dataSource.info()
 
     let state: any = {
       zoom: 8,
       info: info,
+      radius: DataView.RESOLUTION / meterPerPixel(zoom, mapCenter.lat),
     }
 
     if (Object.keys(info.available).length > 0) {
@@ -100,11 +101,6 @@ export default class DataView extends React.Component {
 
     await this.setTargetRestriction()
     await this.getRemoteData()
-
-    // let state: any = await fetch('/serbia.geojson')
-    // state = await state.json()
-    // let coords: any = []
-    // state.features[0].geometry.coordinates[0][0].map((coord: any) => coords.push({lat: coord[1], lng: coord[0]}))
   }
 
   onDateChange = async (prop: string, value: any) => {
@@ -146,15 +142,9 @@ export default class DataView extends React.Component {
 
     const array: any[] = []
     let data: any = await dataSource.data(created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
-    for (let i in data) {
-      array.push({
-        location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
-        weight: data[i].value
-      })
-    }
 
     this.setState({
-      data: array,
+      data: data,
     })
   }
 
@@ -198,13 +188,6 @@ export default class DataView extends React.Component {
               data: this.state.data,
               maxIntensity: DataView.MAX_INTENSITY,
               gradient: DataView.GRADIENT
-            }}
-          />
-          <Polygon
-            path={this.state.state}
-            options={{
-              strokeColor: '#000',
-              strokeWeight: 5
             }}
           />
         </Map>

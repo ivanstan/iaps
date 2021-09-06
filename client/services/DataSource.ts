@@ -16,7 +16,21 @@ export class DataSource {
   data = async (created: string, target: string) => {
     let data: any = await fetch(settings.api + '/api/source/' + this._name + '/data?created=' + created + '&target=' + target)
 
-    return await data.json();
+    data = await data.json();
+
+    let result = []
+    for (let i in data) {
+      if (!data.hasOwnProperty(i)) {
+        continue
+      }
+
+      result.push({
+        location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
+        weight: data[i].value
+      })
+    }
+
+    return result;
   }
 
   point = async (postion: any, created: string, target: string) => {
