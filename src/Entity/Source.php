@@ -25,6 +25,16 @@ class Source
      */
     private string $name;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private string $resolution;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private string $maxValue;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -41,4 +51,26 @@ class Source
 
         return $this;
     }
+
+    public function getMaxValue(): float
+    {
+        return $this->maxValue;
+    }
+
+    public function setMaxValue(float $maxValue): void
+    {
+        $this->maxValue = $maxValue;
+    }
+
+    public function getResolution(): int
+    {
+        return $this->resolution;
+    }
+
+    public function setResolution(int $resolution): void
+    {
+        $this->resolution = $resolution;
+    }
+
+
 }

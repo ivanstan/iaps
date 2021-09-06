@@ -14,7 +14,12 @@ export class DataSource {
   }
 
   data = async (created: string, target: string) => {
-    let data: any = await fetch(settings.api + '/api/source/' + this._name + '/data?created=' + created + '&target=' + target)
+    let params = new URLSearchParams({
+      created: created,
+      target: target
+    })
+
+    let data: any = await fetch(settings.api + '/api/source/' + this._name + '/data?' + params.toString())
 
     data = await data.json();
 

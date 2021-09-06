@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Import;
 use App\Entity\Source;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,6 +29,8 @@ class SourceRepository extends ServiceEntityRepository
 
         $source = new Source();
         $source->setName($name);
+        $source->setMaxValue(10);
+        $source->setResolution(16000);
 
         $this->getEntityManager()->persist($source);
         $this->getEntityManager()->flush();
