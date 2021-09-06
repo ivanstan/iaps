@@ -43,10 +43,6 @@ export default class DataView extends React.Component {
     this.sideBar = React.createRef()
   }
 
-  private static RESOLUTION = 15500
-
-  private static MAX_INTENSITY = 32
-
   private static GRADIENT = [
     "rgba(102, 255, 0, 0)",
     "rgba(102, 255, 0, 1)",
@@ -84,7 +80,7 @@ export default class DataView extends React.Component {
     let state: any = {
       zoom: 8,
       info: info,
-      radius: DataView.RESOLUTION / meterPerPixel(zoom, mapCenter.lat),
+      radius: info.resolution / meterPerPixel(zoom, mapCenter.lat),
     }
 
     if (Object.keys(info.available).length > 0) {
@@ -149,8 +145,10 @@ export default class DataView extends React.Component {
   }
 
   onZoomChange = (meterPerPixel: number) => {
+    const { info } = this.state
+
     this.setState({
-      radius: DataView.RESOLUTION / meterPerPixel
+      radius: info.resolution / meterPerPixel
     })
   }
 
@@ -167,11 +165,13 @@ export default class DataView extends React.Component {
 
     this.setState({ open: true, position: postion, current: data })
 
-    this.sideBar.current.open()
+    if (this.sideBar.current) {
+      this.sideBar.current.open()
+    }
   }
 
   render() {
-    const { createdMin, createdMax, targetMin, targetMax, current } = this.state
+    const { createdMin, createdMax, targetMin, targetMax, current, info } = this.state
 
     // @ts-ignore
     return (
@@ -186,7 +186,7 @@ export default class DataView extends React.Component {
               radius: this.state.radius,
               opacity: .4,
               data: this.state.data,
-              maxIntensity: DataView.MAX_INTENSITY,
+              maxIntensity: info.maxValue,
               gradient: DataView.GRADIENT
             }}
           />
@@ -254,7 +254,7 @@ export default class DataView extends React.Component {
             </span>
           </If>
 
-          <Legend maxIntensity={DataView.MAX_INTENSITY} gradient={DataView.GRADIENT} step={5}/>
+          <Legend maxIntensity={info.maxValue} gradient={DataView.GRADIENT} step={5}/>
 
           {/*<Line*/}
           {/*  type="line"*/}
