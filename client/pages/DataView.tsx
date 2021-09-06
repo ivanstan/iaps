@@ -43,7 +43,7 @@ export default class DataView extends React.Component {
     this.sideBar = React.createRef()
   }
 
-  private static RESOLUTION = 12000
+  private static RESOLUTION = 16000
 
   private static MAX_INTENSITY = 32
 
@@ -68,8 +68,8 @@ export default class DataView extends React.Component {
     state: [],
     legend: [],
     open: false,
-    created: new Date(),
-    target: new Date(),
+    created: moment(),
+    target: moment(),
     dimension: null,
     position: null,
     info: {},
@@ -246,7 +246,7 @@ export default class DataView extends React.Component {
           {/*  <Select*/}
           {/*    labelId="demo-simple-select-label"*/}
           {/*    id="demo-simple-select"*/}
-          {/*    value={this.state.dimenstion}*/}
+          {/*    value={this.state.dimension}*/}
           {/*    onChange={this.onDimensionChange}*/}
           {/*  >*/}
           {/*    <MenuItem value={10}>Ten</MenuItem>*/}
