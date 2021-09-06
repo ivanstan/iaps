@@ -64,7 +64,7 @@ export default class DataView extends React.Component {
   public state: any = {
     data: [],
     zoom: 8,
-    radius: 24,
+    radius: 72.68,
     state: [],
     legend: [],
     open: false,
@@ -96,7 +96,7 @@ export default class DataView extends React.Component {
       state['target'] = moment(info.available[keys[0]][0].target)
     }
 
-    this.setState(state)
+    await this.setState(state)
 
     await this.setTargetRestriction()
     await this.getRemoteData()

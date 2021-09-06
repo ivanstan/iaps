@@ -2,6 +2,7 @@ import React from "react"
 import { GoogleMap, withGoogleMap } from "react-google-maps"
 import { If } from "react-if";
 import Marker from "react-google-maps/lib/components/Marker";
+import { styles } from "../styles";
 
 interface MapPropsInterface {
   zoom?: number
@@ -94,6 +95,7 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
         defaultCenter={{ lat: 43.8125, lng: 21.4612 }}
         onClick={this.onClick}
         options={{
+          // styles: styles,
           minZoom: 7,
           restriction: {
             latLngBounds: {
