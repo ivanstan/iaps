@@ -26,6 +26,11 @@ class Source
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private string $unit;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private string $resolution;
@@ -72,5 +77,13 @@ class Source
         $this->resolution = $resolution;
     }
 
+    public function getUnit(): string
+    {
+        return $this->unit;
+    }
 
+    public function setUnit(string $unit): void
+    {
+        $this->unit = $unit;
+    }
 }

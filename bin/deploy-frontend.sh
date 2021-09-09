@@ -6,7 +6,7 @@ DEPLOY_PATH=/home/glutenfr/projects/dev.ivanstanojevic.me/current/public
 HOST=ivanstanojevic.me
 USER=glutenfr
 PORT=2233
-ARTIFACT_NAME=artifact-$(date '+%Y%m%d%H%M%S').tar.gz
+ARTIFACT_NAME=artifact-$(date '+%Y%m%d%H%M').tar.gz
 
 echo "yarn build"
 yarn build prod

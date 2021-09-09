@@ -9,10 +9,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route("/api")]
 class SourceController extends AbstractController
 {
+    #[Route('/sources', name: 'source_list')]
+    public function list(SourceRepository $repository, NormalizerInterface $normalizer): JsonResponse
+    {
+        return new JsonResponse(
+            $normalizer->normalize($repository->findAll())
+        );
+    }
+
     #[Route("/source/{name}/info", name: "source_info")]
     public function info(
         string $name,
