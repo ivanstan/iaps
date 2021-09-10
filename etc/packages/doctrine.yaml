@@ -22,3 +22,4 @@ doctrine:
                 radians: DoctrineExtensions\Query\Mysql\Radians
                 cos: DoctrineExtensions\Query\Mysql\Cos
                 sin: DoctrineExtensions\Query\Mysql\Sin
+                round: DoctrineExtensions\Query\Mysql\Round

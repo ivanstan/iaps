@@ -33,9 +33,10 @@ class SourceDataRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
 
-        $rangeData = $this->createQueryBuilder('data')
+        $statistics = $this->createQueryBuilder('data')
             ->select('MIN(data.value) as min')
             ->addSelect('MAX(data.value) as max')
+            ->addSelect('ROUND(AVG(data.value), 2) as average')
             ->leftJoin('data.source', 'source')
             ->where('source.name = :name')->setParameter('name', $name)
             ->getQuery()
@@ -52,9 +53,8 @@ class SourceDataRepository extends ServiceEntityRepository
         }
 
         return [
+            'statistics' => $statistics,
             'available' => $available,
-            'min' => $rangeData['min'],
-            'max' => $rangeData['max'],
         ];
     }
 

@@ -28,23 +28,25 @@ export class MainMenu extends React.Component<any, any> {
   }
 
   render() {
-    const menu = (
-      <>
-        {/*<Button href={'#/'}>*/}
-        {/*  Index*/}
-        {/*</Button>*/}
-      </>
-    )
+    // const menu = (
+    //   <>
+    //     {/*<Button href={'#/'}>*/}
+    //     {/*  Index*/}
+    //     {/*</Button>*/}
+    //   </>
+    // )
+
+    const { menu } = this.props
 
     return (
-        <AppBar position='static' elevation={0}>
-          <Toolbar>
-            <Logo src={'logo192.png'}/>
+      <AppBar position='static' elevation={0}>
+        <Toolbar>
+          <Logo src={'logo192.png'}/>
 
-            <Button href={'#/'}>
-              <Typography variant='h6'>
-                IAPS
-              </Typography>
+          <Button href={'#/'}>
+            <Typography variant='h6'>
+              IAPS
+            </Typography>
             </Button>
 
             <div className={'d-none d-md-block'}>

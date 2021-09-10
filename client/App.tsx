@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, createTheme } from "@material-ui/core"
+import { createTheme } from "@material-ui/core"
 import { ThemeProvider } from '@material-ui/styles';
 import { HashRouter, Route, Switch } from "react-router-dom"
 import DataView from './pages/DataView'
@@ -8,7 +8,7 @@ import DateUtils from "@date-io/moment";
 import moment from "moment";
 import { MainMenu } from "./components/MainMenu";
 import styled from "styled-components";
-import { If } from "react-if";
+import { SourceSelect } from "./components/SourceSelect";
 
 const theme = createTheme({
   palette: {
@@ -33,11 +33,20 @@ const InstallBar = styled.div`
 
 class App extends React.Component<any, any> {
 
-  public readonly state = {
-    showInstall: false,
+  constructor(props: any) {
+    super(props);
+
+    if(window.location.hash === '' || window.location.hash === '#/') {
+      window.location.assign('/#/data/medT')
+    }
   }
 
-  componentDidMount() {
+  public readonly state = {
+    showInstall: false,
+    sources: []
+  }
+
+  componentDidMount = async () => {
     window.addEventListener('beforeinstallprompt', (e) => {
 
       // Prevent the mini-infobar from appearing on mobile
@@ -50,7 +59,7 @@ class App extends React.Component<any, any> {
         showInstall: true
       })
     });
-  }
+  };
 
   onInstallClick = async () => {
     if (deferredPrompt) {
@@ -65,14 +74,18 @@ class App extends React.Component<any, any> {
     })
   }
 
+  onSourceChange = (data: any) => {
+    window.location.assign('/#/data/' + data.name);
+  }
+
   render() {
     return (
       <ThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateUtils} libInstance={moment}>
-          <MainMenu/>
+          <MainMenu menu={<SourceSelect onChange={this.onSourceChange}/>}/>
           <HashRouter>
             <Switch>
-              <Route path="/" exact component={DataView}/>
+              <Route path="/data/:source" exact component={DataView}/>
             </Switch>
           </HashRouter>
 
@@ -88,7 +101,6 @@ class App extends React.Component<any, any> {
       </ThemeProvider>
     )
   }
-
 }
 
 export default App

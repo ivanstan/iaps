@@ -3,3 +3,27 @@ export const meterPerPixel = (zoom: number, latitude: number) => {
 }
 
 export const mapCenter = { lat: 43.8125, lng: 21.4612 }
+
+export const replaceUrl = (params: any) => {
+  const split = window.location.hash.split('?')
+  const path = split[0]
+  const query = split[1]
+
+  const urlSearchParams = new URLSearchParams(query)
+
+  for (let i in params) {
+    if (params.hasOwnProperty(i)) {
+      urlSearchParams.set(i, params[i])
+    }
+  }
+
+  window.location.assign(path + '?' + urlSearchParams.toString())
+}
+
+export const getSourceNameFromUrl = () => {
+  const split = window.location.hash.split('?')
+  const path = split[0]
+  const match = path.match(/#\/data\/(.+)/)
+
+  return match ? (match[1] || null) : null
+}

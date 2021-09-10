@@ -28,6 +28,7 @@ class SourceController extends AbstractController
         string $name,
         SourceDataRepository $sourceDataRepository,
         SourceRepository $sourceRepository,
+        NormalizerInterface $normalizer
     ): JsonResponse {
         $source = $sourceRepository->findOneBy(['name' => $name]);
 
@@ -37,11 +38,7 @@ class SourceController extends AbstractController
 
         return new JsonResponse(
             array_merge(
-                [
-                    'name' => $source->getName(),
-                    'resolution' => $source->getResolution(),
-                    'maxValue' => $source->getMaxValue(),
-                ],
+                $normalizer->normalize($source),
                 $sourceDataRepository->getInfo($name),
             )
         );

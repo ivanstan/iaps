@@ -7,6 +7,12 @@ export class DataSource {
     this._name = name;
   }
 
+  static list = async () => {
+    let data: any = await fetch(settings.api + '/api/sources/');
+
+    return await data.json();
+  }
+
   info = async () => {
     let data: any = await fetch(settings.api + '/api/source/' + this._name + '/info');
 

@@ -7,33 +7,9 @@ import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
 import moment from "moment";
 import Legend from "../components/Legend"
-import { mapCenter, meterPerPixel } from "../services/util";
+import { getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl } from "../services/util";
 
-// const options = {
-//   maintainAspectRatio: true,
-//   title: {
-//     display: true,
-//     text: 'Number of requests in last three days'
-//   },
-//   legend: {
-//     display: false,
-//   },
-// }
-//
-// let data = {
-//   labels: [1, 2, 3, 4],
-//   datasets: [{
-//     label: 'Requests',
-//     data: [5, 10, 15, 20],
-//     borderWidth: 1,
-//     borderColor: '#25afb4',
-//     backgroundColor: '#25afb4',
-//   }]
-// }
-
-const name = 'medT'
-
-export default class DataView extends React.Component {
+export default class DataView extends React.Component<any, any> {
 
   private readonly sideBar: React.RefObject<any>
 
@@ -57,7 +33,10 @@ export default class DataView extends React.Component {
     "rgba(255, 0, 0, 1)"
   ]
 
+  // Todo source from url
+
   public state: any = {
+    source: getSourceNameFromUrl(),
     data: [],
     zoom: 8,
     radius: null,
@@ -65,20 +44,53 @@ export default class DataView extends React.Component {
     open: false,
     created: moment(),
     target: moment(),
-    dimension: null,
     position: null,
     info: {},
     current: {},
   }
 
-  async componentDidMount() {
-    const { zoom } = this.state
+  shouldComponentUpdate = (nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean => {
 
-    let dataSource = new DataSource(name)
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      return true
+    }
+
+    if (nextProps.location.search !== this.props.location.search) {
+      return true
+    }
+
+    if (nextState.position !== this.state.position) {
+      return true
+    }
+
+    if (nextState !== this.state) {
+      return true
+    }
+
+    return false
+  };
+
+  static getDerivedStateFromProps(props: any, state: any) {
+    const { match } = props
+
+    // todo dates
+
+    return {
+      source: match.params.source
+    }
+  }
+
+  componentDidMount = async () => {
+    await this.dataSourceChange()
+  }
+
+  dataSourceChange = async () => {
+    const { zoom, source } = this.state
+
+    let dataSource = new DataSource(source)
     const info: any = await dataSource.info()
 
     let state: any = {
-      zoom: 8,
       info: info,
       radius: info.resolution / meterPerPixel(zoom, mapCenter.lat),
     }
@@ -99,12 +111,28 @@ export default class DataView extends React.Component {
     await this.getRemoteData()
   }
 
+  componentDidUpdate = async (prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) => {
+    const { source } = this.state
+
+    if (source !== prevState.source) {
+      await this.dataSourceChange()
+    }
+
+    console.log(source)
+
+  };
+
   onDateChange = async (prop: string, value: any) => {
     let state: any = {}
     state[prop] = value.endOf('month')
 
+    // todo remove
     await this.setState(state)
     await this.getRemoteData()
+
+    let params: any = {}
+    params[prop] = value.endOf('month').format('YYYY-MM-DD')
+    replaceUrl(params)
 
     if (prop === 'created') {
       await this.setTargetRestriction()
@@ -127,14 +155,9 @@ export default class DataView extends React.Component {
     this.setState(state)
   }
 
-  onDimensionChange = async (value: any) => {
-    await this.setState({ dimension: value })
-    await this.getRemoteData()
-  }
-
   getRemoteData = async () => {
-    const { created, target } = this.state;
-    let dataSource = new DataSource(name)
+    const { created, target, source } = this.state;
+    let dataSource = new DataSource(source)
 
     const array: any[] = []
     let data: any = await dataSource.data(created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
@@ -158,9 +181,9 @@ export default class DataView extends React.Component {
       return null
     }
 
-    const { created, target } = this.state;
+    const { created, target, source } = this.state;
 
-    let dataSource = new DataSource(name)
+    let dataSource = new DataSource(source)
     let data = await dataSource.point(postion, created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
 
     this.setState({ open: true, position: postion, current: data })
@@ -224,25 +247,11 @@ export default class DataView extends React.Component {
             }}
           />
 
-          {/*<FormControl>*/}
-          {/*  <InputLabel id="demo-simple-select-label">Dimension</InputLabel>*/}
-          {/*  <Select*/}
-          {/*    labelId="demo-simple-select-label"*/}
-          {/*    id="demo-simple-select"*/}
-          {/*    value={this.state.dimension}*/}
-          {/*    onChange={this.onDimensionChange}*/}
-          {/*  >*/}
-          {/*    <MenuItem value={10}>Ten</MenuItem>*/}
-          {/*    <MenuItem value={20}>Twenty</MenuItem>*/}
-          {/*    <MenuItem value={30}>Thirty</MenuItem>*/}
-          {/*  </Select>*/}
-          {/*</FormControl>*/}
-
           <div style={{ flexGrow: 1 }}/>
 
           <If condition={this.state.current}>
             <span className={'current-value'}>
-              {current.value}
+              {current.value} {info.unit}
             </span>
           </If>
 
@@ -255,14 +264,6 @@ export default class DataView extends React.Component {
           </If>
 
           <Legend maxIntensity={info.maxValue} gradient={DataView.GRADIENT} step={5}/>
-
-          {/*<Line*/}
-          {/*  type="line"*/}
-          {/*  data={data}*/}
-          {/*  height={250}*/}
-          {/*  options={options}*/}
-          {/*/>*/}
-
         </SideBar>
       </>
     )
