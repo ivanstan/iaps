@@ -26,6 +26,11 @@ class Source
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private string $title;
+
+    /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
     private string $unit;
@@ -85,5 +90,15 @@ class Source
     public function setUnit(string $unit): void
     {
         $this->unit = $unit;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 }
