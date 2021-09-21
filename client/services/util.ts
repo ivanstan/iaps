@@ -27,3 +27,14 @@ export const getSourceNameFromUrl = () => {
 
   return match ? (match[1] || null) : null
 }
+
+export const getLegendStep = (name: string): number => {
+  switch (name) {
+    case 'medT':
+      return 5;
+    case 'medP':
+      return 100;
+    default:
+      return 1;
+  }
+}

@@ -7,7 +7,7 @@ import { If } from "react-if"
 import { DataSource } from "../services/DataSource"
 import moment from "moment";
 import Legend from "../components/Legend"
-import { getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl } from "../services/util";
+import { getLegendStep, getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl } from "../services/util";
 
 export default class DataView extends React.Component<any, any> {
 
@@ -220,7 +220,7 @@ export default class DataView extends React.Component<any, any> {
           <KeyboardDatePicker
             margin="normal"
             id="created-picker-dialog"
-            label="Created"
+            label="Prognoza iz"
             format="MM/yyyy"
             views={["month", "year"]}
             value={this.state.created}
@@ -235,7 +235,7 @@ export default class DataView extends React.Component<any, any> {
           <KeyboardDatePicker
             margin="normal"
             id="target-picker-dialog"
-            label="Target"
+            label="Prognoza za"
             format="MM/yyyy"
             views={["month", "year"]}
             value={this.state.target}
@@ -259,11 +259,11 @@ export default class DataView extends React.Component<any, any> {
 
           <If condition={this.state.position}>
             <span className={'current-position'}>
-              {`Current position ${this.state.position?.lat.toFixed(2)} ${this.state.position?.lng.toFixed(2)}`}
+              {`Izabrana lokacija: ${this.state.position?.lat.toFixed(2)}°, ${this.state.position?.lng.toFixed(2)}°`}
             </span>
           </If>
 
-          <Legend maxIntensity={info.maxValue} gradient={DataView.GRADIENT} step={5}/>
+          <Legend maxIntensity={info.maxValue} gradient={DataView.GRADIENT} step={getLegendStep(info.name)}/>
         </SideBar>
       </>
     )

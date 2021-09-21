@@ -3,18 +3,26 @@ import React from "react";
 class Legend extends React.Component<any, any> {
 
   public state = {
-    data: []
+    data: [],
+    width: 300
   }
 
   private legend: any = null;
 
   componentDidMount() {
+    this.setState({
+      width: this.legend.clientWidth
+    })
+  }
+
+  render() {
+    const { width } = this.state;
     const { maxIntensity, step } = this.props;
 
-    let width = this.legend.clientWidth;
+    console.log(maxIntensity, step)
 
-    let legend = [];
-    for (let i = 0; i <= maxIntensity; i += step || 1) {
+    let data = [];
+    for (let i = 0; i <= maxIntensity; i += step || 5) {
       let offset = i * width / maxIntensity;
       if (i > 0 && i < maxIntensity) {
         offset -= 0.5;
@@ -22,19 +30,12 @@ class Legend extends React.Component<any, any> {
         offset -= 1;
       }
 
-      legend.push({
+      data.push({
         title: i,
         offset: offset
       });
     }
 
-    this.setState({
-      data: legend
-    })
-  }
-
-  render() {
-    const { data } = this.state
     const { gradient } = this.props
 
     let gradientCss = '(to right';

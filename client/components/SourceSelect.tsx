@@ -50,7 +50,7 @@ export class SourceSelect extends React.Component<any, any> {
             value={value}
           >
             {this.state.sources.map((item: any, index: number) => (
-              <MenuItem value={item} key={index}>{item.name}</MenuItem>
+              <MenuItem value={item} key={index}>{item.title}</MenuItem>
             ))}
           </Select>
         </FormControl>

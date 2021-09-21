@@ -14,7 +14,7 @@ const MiniBar = styled.div`
 `;
 
 const Container = styled.div`
-
+  overflow-x: hidden;
 `;
 
 const drawerWidth = 440;
