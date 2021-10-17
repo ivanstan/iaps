@@ -94,7 +94,7 @@ class Source
 
     public function getTitle(): string
     {
-        return $this->title;
+        return trim($this->title);
     }
 
     public function setTitle(string $title): void
