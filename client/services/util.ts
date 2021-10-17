@@ -30,6 +30,9 @@ export const getSourceNameFromUrl = () => {
 
 export const getLegendStep = (name: string): number => {
   switch (name) {
+    case 'medFROST':
+    case 'medRX20':
+    case 'medTX35':
     case 'medT':
       return 5;
     case 'medP':
