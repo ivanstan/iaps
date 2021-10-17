@@ -33,7 +33,7 @@ class Source
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private string $unit;
+    private ?string $unit = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -82,12 +82,12 @@ class Source
         $this->resolution = $resolution;
     }
 
-    public function getUnit(): string
+    public function getUnit(): ?string
     {
         return $this->unit;
     }
 
-    public function setUnit(string $unit): void
+    public function setUnit(?string $unit): void
     {
         $this->unit = $unit;
     }
