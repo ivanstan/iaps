@@ -22,11 +22,12 @@ const ColorDot = styled.div`
 export default class DataView extends React.Component<any, any> {
 
   private readonly sideBar: React.RefObject<any>
-  private color: ColorUtil;
+  private color: ColorUtil|null;
 
   constructor(props: any) {
     super(props)
 
+    this.color = null;
     this.sideBar = React.createRef()
   }
 
