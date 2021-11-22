@@ -1,37 +1,34 @@
 import React from "react"
-import { Map } from "../components/Map"
+import {Map} from "../components/Map"
 import HeatmapLayer from "react-google-maps/lib/components/visualization/HeatmapLayer"
 import SideBar from "../components/SideBar"
-import { KeyboardDatePicker, } from '@material-ui/pickers'
-import { If } from "react-if"
-import { DataSource } from "../services/DataSource"
+import {KeyboardDatePicker,} from '@material-ui/pickers'
+import {If} from "react-if"
+import {DataSource} from "../services/DataSource"
 import moment from "moment";
 import Legend from "../components/Legend"
-import { getLegendStep, getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl } from "../services/util";
+import {getLegendStep, getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl} from "../services/util";
+import {ColorUtil} from "../services/ColorUtil";
+import styled from "styled-components";
+
+const ColorDot = styled.div`
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 10px;
+  border-radius: 15px;
+  background-color: ${props => props.color};
+`;
 
 export default class DataView extends React.Component<any, any> {
 
   private readonly sideBar: React.RefObject<any>
+  private color: ColorUtil;
 
   constructor(props: any) {
     super(props)
 
     this.sideBar = React.createRef()
   }
-
-  private static GRADIENT = [
-    "rgba(102, 255, 0, 0)",
-    "rgba(102, 255, 0, 1)",
-    "rgba(147, 255, 0, 1)",
-    "rgba(193, 255, 0, 1)",
-    "rgba(238, 255, 0, 1)",
-    "rgba(244, 227, 0, 1)",
-    "rgba(249, 198, 0, 1)",
-    "rgba(255, 170, 0, 1)",
-    "rgba(255, 113, 0, 1)",
-    "rgba(255, 57, 0, 1)",
-    "rgba(255, 0, 0, 1)"
-  ]
 
   // Todo source from url
 
@@ -71,7 +68,7 @@ export default class DataView extends React.Component<any, any> {
   };
 
   static getDerivedStateFromProps(props: any, state: any) {
-    const { match } = props
+    const {match} = props
 
     // todo dates
 
@@ -85,7 +82,7 @@ export default class DataView extends React.Component<any, any> {
   }
 
   dataSourceChange = async () => {
-    const { zoom, source } = this.state
+    const {zoom, source} = this.state
 
     let dataSource = new DataSource(source)
     const info: any = await dataSource.info()
@@ -105,6 +102,8 @@ export default class DataView extends React.Component<any, any> {
       state['target'] = moment(info.available[keys[0]][0].target)
     }
 
+    this.color = new ColorUtil(info['name'], info['maxValue'])
+
     await this.setState(state)
 
     await this.setTargetRestriction()
@@ -112,14 +111,11 @@ export default class DataView extends React.Component<any, any> {
   }
 
   componentDidUpdate = async (prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) => {
-    const { source } = this.state
+    const {source} = this.state
 
     if (source !== prevState.source) {
       await this.dataSourceChange()
     }
-
-    console.log(source)
-
   };
 
   onDateChange = async (prop: string, value: any) => {
@@ -140,7 +136,7 @@ export default class DataView extends React.Component<any, any> {
   }
 
   setTargetRestriction = () => {
-    const { info, created } = this.state
+    const {info, created} = this.state
 
     if (!info.hasOwnProperty('available')) {
       return
@@ -156,7 +152,7 @@ export default class DataView extends React.Component<any, any> {
   }
 
   getRemoteData = async () => {
-    const { created, target, source } = this.state;
+    const {created, target, source} = this.state;
     let dataSource = new DataSource(source)
 
     const array: any[] = []
@@ -168,7 +164,7 @@ export default class DataView extends React.Component<any, any> {
   }
 
   onZoomChange = (meterPerPixel: number) => {
-    const { info } = this.state
+    const {info} = this.state
 
     this.setState({
       radius: info.resolution / meterPerPixel
@@ -181,12 +177,12 @@ export default class DataView extends React.Component<any, any> {
       return null
     }
 
-    const { created, target, source } = this.state;
+    const {created, target, source} = this.state;
 
     let dataSource = new DataSource(source)
     let data = await dataSource.point(postion, created.format('YYYY-MM-DD'), target.format('YYYY-MM-DD'))
 
-    this.setState({ open: true, position: postion, current: data })
+    this.setState({open: true, position: postion, current: data})
 
     if (this.sideBar.current) {
       this.sideBar.current.open()
@@ -194,13 +190,18 @@ export default class DataView extends React.Component<any, any> {
   }
 
   render() {
-    const { createdMin, createdMax, targetMin, targetMax, current, info } = this.state
+    const {createdMin, createdMax, targetMin, targetMax, current, info} = this.state
+
+    if (!this.color) {
+      // todo return loader
+      return null
+    }
 
     // @ts-ignore
     return (
       <>
-        <Map containerElement={<div style={{ height: window.innerHeight - 64, width: '100%' }}/>}
-             mapElement={<div style={{ height: '100%' }}/>}
+        <Map containerElement={<div style={{height: window.innerHeight - 64, width: '100%'}}/>}
+             mapElement={<div style={{height: '100%'}}/>}
              onZoomChange={this.onZoomChange}
              onClick={this.onClick}
         >
@@ -210,7 +211,7 @@ export default class DataView extends React.Component<any, any> {
               opacity: .4,
               data: this.state.data,
               maxIntensity: info.maxValue,
-              gradient: DataView.GRADIENT
+              gradient: this.color.getGradient(),
             }}
           />
         </Map>
@@ -247,15 +248,19 @@ export default class DataView extends React.Component<any, any> {
             }}
           />
 
-          <div style={{ flexGrow: 1 }}/>
+          <div style={{flexGrow: 1}}/>
 
           <If condition={this.state.current}>
-            <span className={'current-value'}>
-              {current.value} {info.unit}
-            </span>
+            <div>
+              <ColorDot color={this.color.getColor(current.value)}/>
+              <div className={'current-value'}>
+                {current.value} <If condition={current.value}>{info.unit}</If>
+              </div>
+            </div>
           </If>
 
-          <div style={{ flexGrow: 1 }}/>
+
+          <div style={{flexGrow: 1}}/>
 
           <If condition={this.state.position}>
             <span className={'current-position'}>
@@ -263,7 +268,7 @@ export default class DataView extends React.Component<any, any> {
             </span>
           </If>
 
-          <Legend maxIntensity={info.maxValue} gradient={DataView.GRADIENT} step={getLegendStep(info.name)}/>
+          <Legend maxIntensity={info.maxValue} gradient={this.color.getGradient()} step={getLegendStep(info.name)}/>
         </SideBar>
       </>
     )

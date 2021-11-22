@@ -1326,6 +1326,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
+"@indot/rainbowvis@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@indot/rainbowvis/-/rainbowvis-1.0.2.tgz#20f7360a4bf889f62df06eb14cec1b8439e45dda"
+  integrity sha512-1WCIxnxYC6QT5xHxFlAxxADaFAq+Z4FpW0/nR68V5oKyp6QeU0ZNGSveBXLcpOhemt/Q3Aqs8B2UOHCbnpXlXA==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -4577,11 +4582,6 @@ enquirer@^2.3.5:
   integrity sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==
   dependencies:
     ansi-colors "^4.1.1"
-
-ensure-array@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ensure-array/-/ensure-array-1.0.0.tgz#317e9fc632c656bb849eb649133528e205b23abc"
-  integrity sha512-A+3Ntl5WS+GjDnHtC67dKIjw+IoGoeFdNvjn3ZfKEmZgWUz0nxBPE4W52QMCbGZsat0VwWskD5T6AEpe3T2d1g==
 
 entities@^2.0.0:
   version "2.2.0"
@@ -9210,7 +9210,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -9339,6 +9339,11 @@ raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
+rainbowvis.js@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rainbowvis.js/-/rainbowvis.js-1.0.1.tgz#e8998fb97161b02557748c7da097962b0d6e3e00"
+  integrity sha1-6JmPuXFhsCVXdIx9oJeWKw1uPgA=
+
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -9452,14 +9457,6 @@ react-for@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-for/-/react-for-1.0.1.tgz#f7d5bb08210e8fe1773d1acabe52e389464d5557"
   integrity sha512-napeDFBXuahkmwCDUauaQKZQHgD/GfJjFSjLFpR1D/qOD+nH+d59yDowodyENMiNJdgZ7Bwfb2rU/v8LTv5Kcg==
-
-react-foreach@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/react-foreach/-/react-foreach-0.1.1.tgz#5d1876128ad7645e9ac5797cd877dad52434cdc4"
-  integrity sha512-2ldXVQwgCRwKD3jIrQPB9tcIr6CbTTl3DBI3MKYtMCjFdXXqnORGt6x0wH7ObGOvb+2F0fg1kKynF5IIqPCLGA==
-  dependencies:
-    ensure-array "^1.0.0"
-    prop-types "^15.6.0"
 
 react-google-maps@^9.4.5:
   version "9.4.5"

@@ -19,8 +19,6 @@ class Legend extends React.Component<any, any> {
     const { width } = this.state;
     const { maxIntensity, step } = this.props;
 
-    console.log(maxIntensity, step)
-
     let data = [];
     for (let i = 0; i <= maxIntensity; i += step || 5) {
       let offset = i * width / maxIntensity;
