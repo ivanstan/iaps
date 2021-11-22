@@ -32,7 +32,6 @@ export class ColorUtil {
     }
 
     return "rgba(102,255,0,0)"
-
   }
 
 
