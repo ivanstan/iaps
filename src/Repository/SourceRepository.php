@@ -31,6 +31,7 @@ class SourceRepository extends ServiceEntityRepository
         $source->setName($name);
         $source->setMaxValue(10);
         $source->setResolution(16000);
+        $source->setHidden(true);
 
         $this->getEntityManager()->persist($source);
         $this->getEntityManager()->flush();

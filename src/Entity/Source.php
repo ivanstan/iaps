@@ -45,6 +45,11 @@ class Source
      */
     private string $maxValue;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" : 1})
+     */
+    private string $hidden;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,5 +105,15 @@ class Source
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $hidden): void
+    {
+        $this->hidden = $hidden;
     }
 }
