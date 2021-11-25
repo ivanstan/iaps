@@ -4,6 +4,19 @@ import {KeyboardDatePicker} from "@material-ui/pickers"
 import {getSourceNameFromUrl, replaceUrl} from "../services/util"
 import {GraphService} from "../services/GraphService";
 import moment from "moment";
+import {If} from "react-if";
+import {Line} from "react-chartjs-2";
+
+const options = {
+  maintainAspectRatio: false,
+  title: {
+    display: true,
+    text: 'Number of requests in last three days'
+  },
+  legend: {
+    display: false,
+  },
+}
 
 export class GraphPage extends React.Component<any, any> {
 
@@ -11,6 +24,7 @@ export class GraphPage extends React.Component<any, any> {
     source: getSourceNameFromUrl(),
     created: moment(),
     position: null,
+    data: null,
   }
 
   componentDidMount() {
@@ -42,12 +56,36 @@ export class GraphPage extends React.Component<any, any> {
   }
 
   getRemoteData = async () => {
-
-    console.log(this.state)
-
     let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
-    console.log(data)
+    console.log(data);
+
+    let test: any = {
+      labels: Array.from(Array(365).keys()),
+      datasets: []
+    }
+
+    for (let i in data) {
+
+      console.log(data[i])
+
+      test.datasets.push(
+        {
+          label: data[i].name,
+          data: data[i].value,
+          borderWidth: 1,
+          borderColor: 'rgba(53, 134, 77, 1)',
+          backgroundColor: 'rgba(53, 134, 77, 0.2)',
+        }
+      );
+
+      console.log(data[i])
+
+    }
+
+    this.setState({
+      data: test
+    })
   }
 
   render() {
@@ -75,7 +113,15 @@ export class GraphPage extends React.Component<any, any> {
         </Map>
       </div>
 
-
+      <div>
+        <If condition={this.state.data}>
+          <Line
+            data={this.state.data}
+            height={400}
+            options={options}
+          />
+        </If>
+      </div>
     </div>
   }
 }
