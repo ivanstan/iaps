@@ -17,12 +17,6 @@ export class GraphService {
     let data: any = await fetch(settings.api + '/api/graph/' + this._name + '/data?' + params.toString())
     data = data.json();
 
-    for(let i in data) {
-
-      console.log(data[i])
-
-    }
-
     return data;
   };
 }

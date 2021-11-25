@@ -1,7 +1,7 @@
 import React from "react"
 import {Map} from "../components/Map"
 import {KeyboardDatePicker} from "@material-ui/pickers"
-import {getSourceNameFromUrl, replaceUrl} from "../services/util"
+import {getGraphDataSettings, getSourceNameFromUrl, replaceUrl} from "../services/util"
 import {GraphService} from "../services/GraphService";
 import moment from "moment";
 import {If} from "react-if";
@@ -28,15 +28,32 @@ export class GraphPage extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    const params = new URLSearchParams(this.props.location.search);
+    const params: any = new URLSearchParams(this.props.location.search);
+
+    let location = null
+
+    if (params.get('@')) {
+      location = params.get('@').split(',');
+
+      location = {
+        lat: location[0],
+        lng: location[1],
+      }
+    }
 
     this.setState({
-      created: moment(params.get('created'))
+      location: location,
+      created: params.get('created') ? moment(params.get('created')) : moment(),
     })
   }
 
   onClick = async (postion: any) => {
     this.setState({position: postion})
+
+    replaceUrl({
+      '@': postion.lat + ',' + postion.lng
+    });
+
     this.getRemoteData()
   }
 
@@ -56,9 +73,11 @@ export class GraphPage extends React.Component<any, any> {
   }
 
   getRemoteData = async () => {
-    let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
+    if (!this.state.position) {
+      return;
+    }
 
-    console.log(data);
+    let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
     let test: any = {
       labels: Array.from(Array(365).keys()),
@@ -66,21 +85,17 @@ export class GraphPage extends React.Component<any, any> {
     }
 
     for (let i in data) {
-
-      console.log(data[i])
+      let settings = getGraphDataSettings(data[i].name);
 
       test.datasets.push(
         {
           label: data[i].name,
           data: data[i].value,
           borderWidth: 1,
-          borderColor: 'rgba(53, 134, 77, 1)',
-          backgroundColor: 'rgba(53, 134, 77, 0.2)',
+          borderColor: settings.borderColor,
+          backgroundColor: settings.backgroundColor,
         }
       );
-
-      console.log(data[i])
-
     }
 
     this.setState({

@@ -17,7 +17,7 @@ export const replaceUrl = (params: any) => {
     }
   }
 
-  window.location.assign(path + '?' + urlSearchParams.toString())
+  window.location.assign(path + '?' + decodeURIComponent(urlSearchParams.toString()))
 }
 
 export const getSourceNameFromUrl = () => {
@@ -39,5 +39,20 @@ export const getLegendStep = (name: string): number => {
       return 100;
     default:
       return 1;
+  }
+}
+
+export const getGraphDataSettings = (name: string): any => {
+
+  let alpha = 0;
+  if (name.search(/p25/) > -1 || name.search(/p90/) > -1) {
+    alpha = -.4;
+  }
+
+  console.log(alpha)
+
+  return {
+    borderColor: `rgba(96,125,139, ${1 + alpha})`,
+    backgroundColor: `rgba(96,125,139, ${0.4 + alpha})`,
   }
 }
