@@ -84,8 +84,6 @@ export class GraphPage extends React.Component<any, any> {
 
     let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
-    console.log(data)
-
     let test: any = {
       labels: Array.from(Array(365).keys()),
       datasets: []
@@ -124,8 +122,6 @@ export class GraphPage extends React.Component<any, any> {
       );
     }
 
-    console.log(test)
-
     this.setState({
       data: test
     })
@@ -159,6 +155,7 @@ export class GraphPage extends React.Component<any, any> {
       <div>
         <If condition={this.state.data}>
           <Line
+            type='line'
             data={this.state.data}
             height={400}
             options={options}
