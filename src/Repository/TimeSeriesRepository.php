@@ -44,6 +44,7 @@ class TimeSeriesRepository extends ServiceEntityRepository
             ->getArrayResult();
 
         $keys = array_unique(array_column($result, 'name'));
+        sort($keys);
 
         $rval = [];
         foreach ($result as $item) {

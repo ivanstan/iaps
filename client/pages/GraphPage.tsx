@@ -16,6 +16,11 @@ const options = {
   legend: {
     display: false,
   },
+  elements: {
+    point:{
+      radius: 0
+    }
+  },
 }
 
 export class GraphPage extends React.Component<any, any> {
@@ -79,6 +84,8 @@ export class GraphPage extends React.Component<any, any> {
 
     let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
+    console.log(data)
+
     let test: any = {
       labels: Array.from(Array(365).keys()),
       datasets: []
@@ -87,6 +94,24 @@ export class GraphPage extends React.Component<any, any> {
     for (let i in data) {
       let settings = getGraphDataSettings(data[i].name);
 
+      let fill: any = false;
+
+      if (data[i].name.search(/p90/) > -1) {
+        fill = '-2'
+      }
+
+      if (data[i].name.search(/p75/) > -1) {
+        fill = '-1'
+      }
+
+      if (data[i].name.search(/p50/) > -1) {
+        fill = '+1'
+      }
+
+      if (data[i].name.search(/p25/) > -1) {
+        fill = '+2'
+      }
+
       test.datasets.push(
         {
           label: data[i].name,
@@ -94,9 +119,12 @@ export class GraphPage extends React.Component<any, any> {
           borderWidth: 1,
           borderColor: settings.borderColor,
           backgroundColor: settings.backgroundColor,
+          fill: fill
         }
       );
     }
+
+    console.log(test)
 
     this.setState({
       data: test

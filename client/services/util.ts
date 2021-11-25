@@ -46,7 +46,7 @@ export const getGraphDataSettings = (name: string): any => {
 
   let alpha = 0;
   if (name.search(/p25/) > -1 || name.search(/p90/) > -1) {
-    alpha = -.4;
+    alpha = -.2;
   }
 
   console.log(alpha)
