@@ -1,14 +1,15 @@
 import React from 'react'
-import { createTheme } from "@material-ui/core"
-import { ThemeProvider } from '@material-ui/styles';
-import { HashRouter, Route, Switch } from "react-router-dom"
+import {createTheme} from "@material-ui/core"
+import {ThemeProvider} from '@material-ui/styles';
+import {HashRouter, Route, Switch} from "react-router-dom"
 import DataView from './pages/DataView'
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateUtils from "@date-io/moment";
 import moment from "moment";
-import { MainMenu } from "./components/MainMenu";
+import {MainMenu} from "./components/MainMenu";
 import styled from "styled-components";
-import { SourceSelect } from "./components/SourceSelect";
+import {SourceSelect} from "./components/SourceSelect";
+import {GraphPage} from "./pages/GraphPage";
 
 const theme = createTheme({
   palette: {
@@ -86,6 +87,7 @@ class App extends React.Component<any, any> {
           <HashRouter>
             <Switch>
               <Route path="/data/:source" exact component={DataView}/>
+              <Route path="/graph/:source" exact component={GraphPage}/>
             </Switch>
           </HashRouter>
 

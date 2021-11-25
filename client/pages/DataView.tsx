@@ -71,9 +71,11 @@ export default class DataView extends React.Component<any, any> {
   static getDerivedStateFromProps(props: any, state: any) {
     const {match} = props
 
-    // todo dates
+    const params = new URLSearchParams(props.location.search);
 
     return {
+      target: moment(params.get('target')),
+      created: moment(params.get('created')),
       source: match.params.source
     }
   }
@@ -259,7 +261,6 @@ export default class DataView extends React.Component<any, any> {
               </div>
             </div>
           </If>
-
 
           <div style={{flexGrow: 1}}/>
 

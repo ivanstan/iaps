@@ -39,10 +39,21 @@ class TimeSeriesRepository extends ServiceEntityRepository
 
         $query->setMaxResults(10);
 
-        $query->groupBy('source.name', 'data.latitude', 'data.longitude');
-
-        return $query
+        $result = $query
             ->getQuery()
             ->getArrayResult();
+
+        $keys = array_unique(array_column($result, 'name'));
+
+        $rval = [];
+        foreach ($result as $item) {
+            $rval[$item['name']] = $item;
+
+            if (count($rval) === count($keys)) {
+                break;
+            }
+        }
+
+        return array_values($rval);
     }
 }

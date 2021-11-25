@@ -1,3 +1,3 @@
 export const settings = {
-  api: 'https://dev.ivanstanojevic.me',
+  api: 'http://localhost:8000',
 }

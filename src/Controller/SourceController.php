@@ -19,7 +19,7 @@ class SourceController extends AbstractController
     public function list(SourceRepository $repository, NormalizerInterface $normalizer): JsonResponse
     {
         return new JsonResponse(
-            $normalizer->normalize($repository->findAll())
+            $normalizer->normalize($repository->findBy(['hidden' => false]))
         );
     }
 

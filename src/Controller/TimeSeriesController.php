@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route("/api")]
 class TimeSeriesController extends AbstractController
 {
-    #[Route("/series/{name}/data", name: "source_get")]
+    #[Route("/graph/{name}/data", name: "source_get")]
     public function data(string $name, Request $request, TimeSeriesRepository $repository): JsonResponse
     {
         return new JsonResponse(
