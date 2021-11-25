@@ -10,7 +10,7 @@ use App\Entity\Fields\TargetDateField;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\TimeSeriesRepository")
  * @ORM\Table(name="`time_series`",indexes={
  *     @ORM\Index(name="time_series", columns={"source_id", "created_date", "target_date", "latitude", "longitude"})
  * })

@@ -12,7 +12,7 @@ class ImportGraphService extends AbstractImportService
     {
         $fileInfo = $this->getFileNameInfo($file);
 
-        $source = $this->getSource($fileInfo['source']);
+        $source = $this->getSource($fileInfo['source'].'_'.$fileInfo['subname']);
         $import = $this->getImport($file);
 
         $handle = $this->openFile($file);
@@ -24,7 +24,6 @@ class ImportGraphService extends AbstractImportService
             $entity->setLongitude($data[1]);
             $entity->setSource($source);
             $entity->setImport($import);
-            $entity->setTargetDate($fileInfo['target_date']);
 
             $targetDate = new \DateTime();
             $targetDate->setDate($fileInfo['created_date']->format('Y'), 1, 1);
@@ -66,16 +65,10 @@ class ImportGraphService extends AbstractImportService
         $createdDate = new \DateTime();
         $createdDate->setDate($createdYear, $createdMonth, 0);
 
-        $targetYear = (int)substr($fileParts[2], 0, 4);
-        $targetMonth = (int)substr($fileParts[2], 4, 2) + 1;
-
-        $targetDate = new \DateTime();
-        $targetDate->setDate($targetYear, $targetMonth, 0);
-
         return [
             'source' => $fileParts[0],
             'created_date' => $createdDate,
-            'target_date' => $targetDate,
+            'subname' => $fileParts[2],
         ];
     }
 }
