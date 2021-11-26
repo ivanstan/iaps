@@ -1,7 +1,7 @@
 import React from "react"
 import {Map} from "../components/Map"
 import {KeyboardDatePicker} from "@material-ui/pickers"
-import {getGraphDataSettings, getSourceNameFromUrl, replaceUrl} from "../services/util"
+import {getGraphDataSettings, getLabelsForYear, getSourceNameFromUrl, replaceUrl} from "../services/util"
 import {GraphService} from "../services/GraphService";
 import moment from "moment";
 import {If} from "react-if";
@@ -11,7 +11,7 @@ const options = {
   maintainAspectRatio: false,
   title: {
     display: true,
-    text: 'Number of requests in last three days'
+    text: ''
   },
   legend: {
     display: false,
@@ -20,6 +20,9 @@ const options = {
     point:{
       radius: 0
     }
+  },
+  interaction: {
+    mode: 'index'
   },
 }
 
@@ -55,6 +58,10 @@ export class GraphPage extends React.Component<any, any> {
   onClick = async (postion: any) => {
     this.setState({position: postion})
 
+    if (!postion) {
+      return
+    }
+
     replaceUrl({
       '@': postion.lat + ',' + postion.lng
     });
@@ -84,8 +91,10 @@ export class GraphPage extends React.Component<any, any> {
 
     let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
+    console.log(data);
+
     let test: any = {
-      labels: Array.from(Array(365).keys()),
+      labels: getLabelsForYear(this.state.created.format('YYYY')),
       datasets: []
     }
 

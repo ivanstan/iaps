@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const meterPerPixel = (zoom: number, latitude: number) => {
   return 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, zoom)
 }
@@ -49,10 +51,27 @@ export const getGraphDataSettings = (name: string): any => {
     alpha = -.2;
   }
 
-  console.log(alpha)
-
   return {
     borderColor: `rgba(96,125,139, ${1 + alpha})`,
     backgroundColor: `rgba(96,125,139, ${0.4 + alpha})`,
   }
+}
+
+export const getLabelsForYear = (year: string) => {
+
+  console.log(year)
+
+  const result = [];
+
+  var startDate = moment('01-01-' + year, "DD-MM-YYYY");
+
+  for(let i in Array.from(Array(365).keys())) {
+
+    let newDate = startDate.clone().add(i, 'd');
+
+
+    result.push(newDate.format('DD-MM-YYYY'))
+  }
+
+  return result;
 }
