@@ -41,10 +41,18 @@ const styles: any = (theme: any) => ({
   }
 })
 
-export class SideBar extends React.Component<any, any> {
+class SideBar extends React.Component<any, any> {
 
   public readonly state = {
     isOpen: false
+  }
+
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      isOpen: props.open
+    }
   }
 
   open = (isOpen: boolean = true) => {

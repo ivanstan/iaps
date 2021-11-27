@@ -2,10 +2,13 @@ import React from "react"
 import {Map} from "../components/Map"
 import {KeyboardDatePicker} from "@material-ui/pickers"
 import {getGraphDataSettings, getLabelsForYear, getSourceNameFromUrl, replaceUrl} from "../services/util"
-import {GraphService} from "../services/GraphService";
-import moment from "moment";
-import {If} from "react-if";
-import {Line} from "react-chartjs-2";
+import {GraphService} from "../services/GraphService"
+import moment from "moment"
+import {If} from "react-if"
+import {Line} from "react-chartjs-2"
+import SideBar from "../components/SideBar"
+import styled from "styled-components";
+import {defaultLocation} from "../settings";
 
 const options = {
   maintainAspectRatio: false,
@@ -18,36 +21,57 @@ const options = {
   },
   elements: {
     point:{
-      radius: 0
+      radius: 1
     }
   },
   interaction: {
     mode: 'index'
   },
+  layout: {
+    padding: 30
+  }
 }
 
+const ViewPort = styled.div`
+  height: calc(100vh - 64px);
+`;
+
 export class GraphPage extends React.Component<any, any> {
+
+  private sideBar: React.RefObject<unknown>;
+
+  constructor(props: any) {
+    super(props)
+
+    this.sideBar = React.createRef()
+  }
 
   readonly state = {
     source: getSourceNameFromUrl(),
     created: moment(),
     position: null,
     data: null,
+    open: true,
   }
 
-  componentDidMount() {
-    const params: any = new URLSearchParams(this.props.location.search);
+  async componentDidMount() {
+    const params: any = new URLSearchParams(this.props.location.search)
 
-    let location = null
-
+    let location
     if (params.get('@')) {
-      location = params.get('@').split(',');
+      location = params.get('@').split(',')
 
       location = {
         lat: location[0],
         lng: location[1],
       }
+    } else {
+      location = defaultLocation
     }
+
+    let data = await (new GraphService(this.props.match.params.source)).info()
+
+    console.log(data)
 
     this.setState({
       location: location,
@@ -64,7 +88,7 @@ export class GraphPage extends React.Component<any, any> {
 
     replaceUrl({
       '@': postion.lat + ',' + postion.lng
-    });
+    })
 
     this.getRemoteData()
   }
@@ -86,12 +110,12 @@ export class GraphPage extends React.Component<any, any> {
 
   getRemoteData = async () => {
     if (!this.state.position) {
-      return;
+      return
     }
 
-    let data = await (new GraphService('medGDD')).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
+    let data = await (new GraphService(this.props.match.params.source)).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
 
-    console.log(data);
+    console.log(data)
 
     let test: any = {
       labels: getLabelsForYear(this.state.created.format('YYYY')),
@@ -99,9 +123,9 @@ export class GraphPage extends React.Component<any, any> {
     }
 
     for (let i in data) {
-      let settings = getGraphDataSettings(data[i].name);
+      let settings = getGraphDataSettings(data[i].name)
 
-      let fill: any = false;
+      let fill: any = false
 
       if (data[i].name.search(/p90/) > -1) {
         fill = '-2'
@@ -128,7 +152,7 @@ export class GraphPage extends React.Component<any, any> {
           backgroundColor: settings.backgroundColor,
           fill: fill
         }
-      );
+      )
     }
 
     this.setState({
@@ -137,9 +161,9 @@ export class GraphPage extends React.Component<any, any> {
   }
 
   render() {
-    return <div>
+    return <ViewPort>
 
-      <div>
+      <SideBar open={this.state.open} ref={this.sideBar}>
         <KeyboardDatePicker
           margin="normal"
           id="created-picker-dialog"
@@ -154,15 +178,16 @@ export class GraphPage extends React.Component<any, any> {
             'aria-label': 'change date',
           }}
         />
-        <Map containerElement={<div style={{height: window.innerHeight - 64, width: '50%'}}/>}
+        <label className="MuiFormLabel-root">Odabir lokacije</label>
+        <Map containerElement={<div style={{height: window.innerHeight - 64, width: '100%'}}/>}
              mapElement={<div style={{height: '100%'}}/>}
+             zoom={7}
              onClick={this.onClick}
         >
         </Map>
-      </div>
+      </SideBar>
 
-      <div>
-        <If condition={this.state.data}>
+      <If condition={this.state.data}>
           <Line
             type='line'
             data={this.state.data}
@@ -170,7 +195,6 @@ export class GraphPage extends React.Component<any, any> {
             options={options}
           />
         </If>
-      </div>
-    </div>
+      </ViewPort>
   }
 }

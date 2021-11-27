@@ -16,6 +16,18 @@ class TimeSeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, TimeSeries::class);
     }
 
+    public function getInfo(string $name) {
+        $builder = $this->createQueryBuilder('data')
+            ->select(['data.createdDate'])
+            ->leftJoin('data.source', 'source')
+            ->where('source.name LIKE :name')->setParameter('name', $name.'%');
+
+        $builder->groupBy('data.createdDate');
+        $builder->orderBy('data.createdDate', 'DESC');
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
     public function getData(string $name, float $latitude, float $longitude, ?string $created): array|int|string
     {
         $query = $this->createQueryBuilder('data')

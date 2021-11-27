@@ -7,6 +7,13 @@ export class GraphService {
     this._name = name;
   }
 
+  info = async () => {
+    let data: any = await fetch(settings.api + '/api/graph/' + this._name + '/info')
+    data = data.json();
+
+    return data;
+  }
+
   get = async (created: any, position: any) => {
     let params = new URLSearchParams({
       created: created,
