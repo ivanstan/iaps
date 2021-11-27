@@ -8,7 +8,7 @@ import {If} from "react-if"
 import {Line} from "react-chartjs-2"
 import SideBar from "../components/SideBar"
 import styled from "styled-components";
-import {defaultLocation} from "../settings";
+import {defaultPosition} from "../settings";
 
 const options = {
   maintainAspectRatio: false,
@@ -32,9 +32,14 @@ const options = {
   }
 }
 
+const Label = styled.label`
+   font-size: 12px;
+   margin: 20px 0 10px;
+`
+
 const ViewPort = styled.div`
   height: calc(100vh - 64px);
-`;
+`
 
 export class GraphPage extends React.Component<any, any> {
 
@@ -49,6 +54,8 @@ export class GraphPage extends React.Component<any, any> {
   readonly state = {
     source: getSourceNameFromUrl(),
     created: moment(),
+    createdMax: moment(),
+    createdMin: moment().subtract(1, 'year'),
     position: null,
     data: null,
     open: true,
@@ -57,26 +64,28 @@ export class GraphPage extends React.Component<any, any> {
   async componentDidMount() {
     const params: any = new URLSearchParams(this.props.location.search)
 
-    let location
+    let position
     if (params.get('@')) {
-      location = params.get('@').split(',')
+      position = params.get('@').split(',')
 
-      location = {
-        lat: location[0],
-        lng: location[1],
+      position = {
+        lat: position[0],
+        lng: position[1],
       }
     } else {
-      location = defaultLocation
+      position = defaultPosition
     }
 
     let data = await (new GraphService(this.props.match.params.source)).info()
 
-    console.log(data)
-
     this.setState({
-      location: location,
-      created: params.get('created') ? moment(params.get('created')) : moment(),
+      createdMax: moment(data[0].createdDate.date),
+      createdMin: moment(data[data.length - 1].createdDate.date),
+      position: position,
+      created: params.get('created') ? moment(params.get('created')) : moment(data[0].createdDate.date),
     })
+
+    this.getRemoteData()
   }
 
   onClick = async (postion: any) => {
@@ -172,13 +181,13 @@ export class GraphPage extends React.Component<any, any> {
           views={["month", "year"]}
           value={this.state.created}
           onChange={(param) => this.onDateChange('created', param)}
-          // maxDate={createdMax}
-          // minDate={createdMin}
+          maxDate={this.state.createdMax}
+          minDate={this.state.createdMin}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}
         />
-        <label className="MuiFormLabel-root">Odabir lokacije</label>
+        <Label className="MuiFormLabel-root">Odabir lokacije</Label>
         <Map containerElement={<div style={{height: window.innerHeight - 64, width: '100%'}}/>}
              mapElement={<div style={{height: '100%'}}/>}
              zoom={7}
@@ -194,7 +203,7 @@ export class GraphPage extends React.Component<any, any> {
             height={400}
             options={options}
           />
-        </If>
-      </ViewPort>
+      </If>
+    </ViewPort>
   }
 }
