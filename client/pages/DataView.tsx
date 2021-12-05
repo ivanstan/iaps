@@ -7,7 +7,14 @@ import {If} from "react-if"
 import {DataSource} from "../services/DataSource"
 import moment from "moment";
 import Legend from "../components/Legend"
-import {getLegendStep, getSourceNameFromUrl, mapCenter, meterPerPixel, replaceUrl} from "../services/util";
+import {
+  getLegendStep,
+  getPositionFromParam,
+  getSourceNameFromUrl,
+  mapCenter,
+  meterPerPixel,
+  replaceUrl
+} from "../services/util";
 import {ColorUtil} from "../services/ColorUtil";
 import styled from "styled-components";
 
@@ -74,8 +81,8 @@ export default class DataView extends React.Component<any, any> {
     const params = new URLSearchParams(props.location.search);
 
     return {
-      target: moment(params.get('target')),
-      created: moment(params.get('created')),
+      // target: moment(params.get('target') ? params.get('target') : moment()),
+      // created: moment(params.get('created') ? params.get('created') : moment()),
       source: match.params.source
     }
   }
@@ -93,6 +100,7 @@ export default class DataView extends React.Component<any, any> {
     let state: any = {
       info: info,
       radius: info.resolution / meterPerPixel(zoom, mapCenter.lat),
+      position: getPositionFromParam(this.props.location),
     }
 
     if (Object.keys(info.available).length > 0) {
@@ -187,6 +195,10 @@ export default class DataView extends React.Component<any, any> {
 
     this.setState({open: true, position: postion, current: data})
 
+    replaceUrl({
+      '@': postion.lat + ',' + postion.lng
+    })
+
     if (this.sideBar.current) {
       this.sideBar.current.open()
     }
@@ -207,6 +219,7 @@ export default class DataView extends React.Component<any, any> {
              mapElement={<div style={{height: '100%'}}/>}
              onZoomChange={this.onZoomChange}
              onClick={this.onClick}
+             position={this.state.position}
         >
           <HeatmapLayer
             options={{

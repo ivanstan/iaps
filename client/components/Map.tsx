@@ -9,6 +9,7 @@ interface MapPropsInterface {
   zoom?: number
   onZoomChange?: Function
   onClick?: Function
+  position: any
 }
 
 const Position = new google.maps.MarkerImage(
@@ -68,21 +69,31 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
   }
 
   componentDidMount() {
-    this.getHtml5Geolocation(null).then(position => {
-      this.setState({ position: position })
-
-      if (this._map) {
-        this._map.setState({
-          center: position
-        });
-      }
+    if (this.props.position) {
+      this.setState({ position: this.props.position });
 
       const { onClick } = this.props
 
       if (onClick) {
-        onClick(position)
+        onClick(this.props.position)
       }
-    });
+    } else {
+      this.getHtml5Geolocation(null).then(position => {
+        this.setState({ position: position })
+
+        if (this._map) {
+          this._map.setState({
+            center: position
+          });
+        }
+
+        const { onClick } = this.props
+
+        if (onClick) {
+          onClick(position)
+        }
+      });
+    }
   }
 
   render() {
@@ -110,7 +121,7 @@ class CustomGoogleMap extends React.Component<MapPropsInterface> {
       >
         {children}
         <If condition={this.state.position}>
-          <Marker position={this.state.position} icon={Position}/>
+          <Marker position={this.state.position} icon={Position} draggable onDragEnd={this.onClick}/>
         </If>
       </GoogleMap>
     )

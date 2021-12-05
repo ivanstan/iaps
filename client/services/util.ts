@@ -1,4 +1,5 @@
 import moment from "moment";
+import {defaultPosition} from "../settings";
 
 export const meterPerPixel = (zoom: number, latitude: number) => {
   return 156543.03392 * Math.cos(latitude * Math.PI / 180) / Math.pow(2, zoom)
@@ -58,20 +59,33 @@ export const getGraphDataSettings = (name: string): any => {
 }
 
 export const getLabelsForYear = (year: string) => {
-
-  console.log(year)
-
   const result = [];
 
   var startDate = moment('01-01-' + year, "DD-MM-YYYY");
 
-  for(let i in Array.from(Array(365).keys())) {
+  for (let i in Array.from(Array(365).keys())) {
 
     let newDate = startDate.clone().add(i, 'd');
-
 
     result.push(newDate.format('DD-MM-YYYY'))
   }
 
   return result;
+}
+
+export const getPositionFromParam = (location: any) => {
+  const params: any = new URLSearchParams(location.search)
+
+  let position
+  if (params.get('@')) {
+    position = params.get('@').split(',')
+
+    return {
+      lat: parseFloat(position[0]),
+      lng: parseFloat(position[1]),
+    }
+
+  }
+
+  return defaultPosition
 }

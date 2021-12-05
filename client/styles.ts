@@ -4,10 +4,10 @@ export const styles = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#e9e9e9"
+        "color": "#fff"
       },
       {
-        "lightness": 17
+        "lightness": 1
       }
     ]
   },
@@ -16,10 +16,10 @@ export const styles = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#f5f5f5"
+        "color": "#fff"
       },
       {
-        "lightness": 20
+        "lightness": 1
       }
     ]
   },
@@ -31,7 +31,7 @@ export const styles = [
         "color": "#ffffff"
       },
       {
-        "lightness": 17
+        "lightness": 1
       }
     ]
   },
@@ -43,7 +43,7 @@ export const styles = [
         "color": "#ffffff"
       },
       {
-        "lightness": 29
+        "lightness": 1
       },
       {
         "weight": 0.2
@@ -58,7 +58,7 @@ export const styles = [
         "color": "#ffffff"
       },
       {
-        "lightness": 18
+        "lightness": 1
       }
     ]
   },
@@ -70,7 +70,7 @@ export const styles = [
         "color": "#ffffff"
       },
       {
-        "lightness": 16
+        "lightness": 1
       }
     ]
   },
@@ -79,10 +79,10 @@ export const styles = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#f5f5f5"
+        "color": "#fff"
       },
       {
-        "lightness": 21
+        "lightness": 1
       }
     ]
   },
@@ -91,10 +91,10 @@ export const styles = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#dedede"
+        "color": "#fff"
       },
       {
-        "lightness": 21
+        "lightness": 1
       }
     ]
   },
@@ -108,7 +108,7 @@ export const styles = [
         "color": "#ffffff"
       },
       {
-        "lightness": 16
+        "lightness": 1
       }
     ]
   },
@@ -116,13 +116,13 @@ export const styles = [
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "saturation": 36
+        "saturation": 1
       },
       {
-        "color": "#333333"
+        "color": "#fff"
       },
       {
-        "lightness": 40
+        "lightness": 1
       }
     ]
   },
@@ -139,10 +139,10 @@ export const styles = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#f2f2f2"
+        "color": "#fff"
       },
       {
-        "lightness": 19
+        "lightness": 1
       }
     ]
   },
@@ -151,10 +151,10 @@ export const styles = [
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#fefefe"
+        "color": "#fff"
       },
       {
-        "lightness": 20
+        "lightness": 1
       }
     ]
   },
@@ -163,10 +163,10 @@ export const styles = [
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#fefefe"
+        "color": "#fff"
       },
       {
-        "lightness": 17
+        "lightness": 1
       },
       {
         "weight": 1.2

@@ -1,7 +1,13 @@
 import React from "react"
 import {Map} from "../components/Map"
 import {KeyboardDatePicker} from "@material-ui/pickers"
-import {getGraphDataSettings, getLabelsForYear, getSourceNameFromUrl, replaceUrl} from "../services/util"
+import {
+  getGraphDataSettings,
+  getLabelsForYear,
+  getPositionFromParam,
+  getSourceNameFromUrl,
+  replaceUrl
+} from "../services/util"
 import {GraphService} from "../services/GraphService"
 import moment from "moment"
 import {If} from "react-if"
@@ -64,24 +70,15 @@ export class GraphPage extends React.Component<any, any> {
   async componentDidMount() {
     const params: any = new URLSearchParams(this.props.location.search)
 
-    let position
-    if (params.get('@')) {
-      position = params.get('@').split(',')
-
-      position = {
-        lat: position[0],
-        lng: position[1],
-      }
-    } else {
-      position = defaultPosition
-    }
+    this.setState({
+      position: getPositionFromParam(this.props.location),
+    })
 
     let data = await (new GraphService(this.props.match.params.source)).info()
 
     this.setState({
       createdMax: moment(data[0].createdDate.date),
       createdMin: moment(data[data.length - 1].createdDate.date),
-      position: position,
       created: params.get('created') ? moment(params.get('created')) : moment(data[0].createdDate.date),
     })
 
@@ -123,8 +120,6 @@ export class GraphPage extends React.Component<any, any> {
     }
 
     let data = await (new GraphService(this.props.match.params.source)).get(this.state.created.format('YYYY-MM-DD'), this.state.position)
-
-    console.log(data)
 
     let test: any = {
       labels: getLabelsForYear(this.state.created.format('YYYY')),
@@ -192,6 +187,7 @@ export class GraphPage extends React.Component<any, any> {
              mapElement={<div style={{height: '100%'}}/>}
              zoom={7}
              onClick={this.onClick}
+             position={this.state.position}
         >
         </Map>
       </SideBar>
