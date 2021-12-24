@@ -132,19 +132,24 @@ export class GraphPage extends React.Component<any, any> {
       let fill: any = false
 
       if (data[i].name.search(/p90/) > -1) {
-        fill = '-2'
+        fill = '0'
       }
 
       if (data[i].name.search(/p75/) > -1) {
-        fill = '-1'
+        fill = '-2'
       }
 
       if (data[i].name.search(/p50/) > -1) {
-        fill = '+1'
+        settings.backgroundColor = '#DC143C';
+        settings.borderColor = '#B22222';
       }
 
       if (data[i].name.search(/p25/) > -1) {
         fill = '+2'
+      }
+
+      if (data[i].name.search(/p10/) > -1) {
+        fill = '0'
       }
 
       test.datasets.push(

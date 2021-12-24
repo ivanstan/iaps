@@ -67,6 +67,8 @@ class TimeSeriesRepository extends ServiceEntityRepository
             }
         }
 
+        krsort($rval);
+
         return array_values($rval);
     }
 }
