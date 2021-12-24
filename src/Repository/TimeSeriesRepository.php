@@ -56,11 +56,10 @@ class TimeSeriesRepository extends ServiceEntityRepository
             ->getArrayResult();
 
         $keys = array_unique(array_column($result, 'name'));
-        sort($keys);
 
         $rval = [];
         foreach ($result as $item) {
-            $rval[$item['name']] = $item;
+            $rval[$item['name']] = $this->trimEndOfYear($item);
 
             if (count($rval) === count($keys)) {
                 break;
@@ -70,5 +69,35 @@ class TimeSeriesRepository extends ServiceEntityRepository
         krsort($rval);
 
         return array_values($rval);
+    }
+
+    /**
+     * Nullifies zero data from the end of the year to the last value
+     *
+     * @param array $data
+     * @return array
+     */
+    public function trimEndOfYear(array $data): array
+    {
+        $offset = null;
+
+        for (end($data['value']); ($currentKey=key($data['value']))!==null; prev($data['value'])){
+            $currentElement = current($data['value']);
+
+            if ($currentElement !== '0') {
+                $offset = $currentKey + 1;
+                break;
+            }
+        }
+
+        $count = count($data['value']);
+
+        while ($offset < $count) {
+            $data['value'][$offset] = null;
+
+            $offset++;
+        }
+
+        return $data;
     }
 }

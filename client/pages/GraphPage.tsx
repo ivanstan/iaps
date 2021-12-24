@@ -22,8 +22,8 @@ const options = {
     display: true,
     text: ''
   },
-  legend: {
-    display: false,
+  animation: {
+    duration: 0
   },
   elements: {
     point:{
@@ -35,6 +35,11 @@ const options = {
   },
   layout: {
     padding: 30
+  },
+  plugins: {
+    legend: {
+      display: true,
+    },
   }
 }
 
@@ -145,7 +150,7 @@ export class GraphPage extends React.Component<any, any> {
       }
 
       if (data[i].name.search(/p25/) > -1) {
-        fill = '+2'
+        fill = '-2'
       }
 
       if (data[i].name.search(/p10/) > -1) {
