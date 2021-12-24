@@ -13,6 +13,8 @@ const Menu = styled.div`
 const Logo = styled.img`
   height: 32px;
   display: inline-block;
+  background: #fff;
+  border-radius: 16px;
 `;
 
 const LogoSecondary = styled.img`
