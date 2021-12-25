@@ -212,6 +212,8 @@ export default class DataView extends React.Component<any, any> {
       return null
     }
 
+    let step = getLegendStep(info.name);
+
     // @ts-ignore
     return (
       <>
@@ -268,7 +270,7 @@ export default class DataView extends React.Component<any, any> {
 
           <If condition={this.state.current}>
             <div>
-              <ColorDot color={this.color.getColor(current.value)}/>
+              <ColorDot color={this.color.getColor(current.value + step)}/>
               <div className={'current-value'}>
                 {current.value} <If condition={current.value}>{info.unit}</If>
               </div>
@@ -283,7 +285,7 @@ export default class DataView extends React.Component<any, any> {
             </span>
           </If>
 
-          <Legend maxIntensity={info.maxValue} gradient={this.color.getGradient()} step={getLegendStep(info.name)}/>
+          <Legend maxIntensity={info.maxValue} gradient={this.color.getGradient()} step={step}/>
         </SideBar>
       </>
     )

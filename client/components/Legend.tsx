@@ -4,19 +4,26 @@ class Legend extends React.Component<any, any> {
 
   public state = {
     data: [],
-    width: 300
+    width: 300,
+    gradient: [],
   }
 
   private legend: any = null;
 
   componentDidMount() {
+    const { gradient } = this.props
+
+    let colors =  [...gradient]
+    colors.splice(0,1)
+
     this.setState({
+      gradient: colors,
       width: this.legend.clientWidth
     })
   }
 
   render() {
-    const { width } = this.state;
+    const { width, gradient } = this.state;
     const { maxIntensity, step } = this.props;
 
     let data = [];
@@ -33,8 +40,6 @@ class Legend extends React.Component<any, any> {
         offset: offset
       });
     }
-
-    const { gradient } = this.props
 
     let gradientCss = '(to right';
     for (let i = 0; i < gradient.length; ++i) {
