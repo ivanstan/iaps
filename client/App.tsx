@@ -1,5 +1,5 @@
 import React from 'react'
-import {createTheme} from "@material-ui/core"
+import {Button, createTheme} from "@material-ui/core"
 import {ThemeProvider} from '@material-ui/styles';
 import {HashRouter, Route, Switch} from "react-router-dom"
 import DataView from './pages/DataView'
@@ -10,6 +10,7 @@ import {MainMenu} from "./components/MainMenu";
 import styled from "styled-components";
 import {SourceSelect} from "./components/SourceSelect";
 import {GraphPage} from "./pages/GraphPage";
+import {PredictionMenu} from "./components/PredictionMenu";
 
 const theme = createTheme({
   palette: {
@@ -83,22 +84,13 @@ class App extends React.Component<any, any> {
     return (
       <ThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateUtils} libInstance={moment}>
-          <MainMenu menu={<SourceSelect onChange={this.onSourceChange}/>}/>
+          <MainMenu menu={<PredictionMenu/>}/>
           <HashRouter>
             <Switch>
               <Route path="/data/:source" exact component={DataView}/>
               <Route path="/graph/:source" exact component={GraphPage}/>
             </Switch>
           </HashRouter>
-
-          {/*<If condition={this.state.showInstall}>*/}
-          {/*  <InstallBar>*/}
-          {/*    <Button onClick={this.onInstallClick}>*/}
-          {/*      Install*/}
-          {/*    </Button>*/}
-          {/*  </InstallBar>*/}
-          {/*</If>*/}
-
         </MuiPickersUtilsProvider>
       </ThemeProvider>
     )

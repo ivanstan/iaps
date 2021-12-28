@@ -42,9 +42,9 @@ export class MainMenu extends React.Component<any, any> {
   render() {
     // const menu = (
     //   <>
-    //     {/*<Button href={'#/'}>*/}
-    //     {/*  Index*/}
-    //     {/*</Button>*/}
+    //     <Button href={'#/'}>
+    //       Index
+    //     </Button>
     //   </>
     // )
 
