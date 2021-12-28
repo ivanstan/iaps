@@ -1,5 +1,6 @@
 import React from "react";
-import {Button, Link, Menu, MenuItem} from "@material-ui/core";
+import {Button, Menu, MenuItem} from "@material-ui/core";
+import {ExpandMore} from "@material-ui/icons";
 
 export function PredictionMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,8 +20,9 @@ export function PredictionMenu() {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        endIcon={<ExpandMore/>}
       >
-        Prognoza
+        Prognoze
       </Button>
       <Menu
         id="basic-menu"
