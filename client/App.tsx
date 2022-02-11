@@ -11,6 +11,7 @@ import styled from "styled-components";
 import {SourceSelect} from "./components/SourceSelect";
 import {GraphPage} from "./pages/GraphPage";
 import {PredictionMenu} from "./components/PredictionMenu";
+import ClimatologyView from "./pages/ClimatologyView";
 
 const theme = createTheme({
   palette: {
@@ -89,6 +90,7 @@ class App extends React.Component<any, any> {
             <Switch>
               <Route path="/data/:source" exact component={DataView}/>
               <Route path="/graph/:source" exact component={GraphPage}/>
+              <Route path="/climatology/:source" exact component={ClimatologyView}/>
             </Switch>
           </HashRouter>
         </MuiPickersUtilsProvider>
