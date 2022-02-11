@@ -5,6 +5,8 @@ import SideBar from "../components/SideBar";
 import {ColorUtil} from "../services/ColorUtil";
 import {ClimatologyService} from "../services/ClimatologyService";
 import {mapCenter, meterPerPixel} from "../services/util";
+import {If} from "react-if";
+import {ClimatologyDetailsTable} from "../components/ClimatologyDetailsTable";
 
 export default class ClimatologyView extends React.Component<any, any> {
 
@@ -21,6 +23,7 @@ export default class ClimatologyView extends React.Component<any, any> {
     map: [],
     radius: 11,
     zoom: 8,
+    current: null,
   }
 
   constructor(props: any) {
@@ -68,7 +71,11 @@ export default class ClimatologyView extends React.Component<any, any> {
     if (latLng) {
       let data = await this.service.getPoint(this.props.match.params.source, latLng)
 
-      console.log(data)
+      if (data.value) {
+        this.setState({
+          current: data
+        })
+      }
     }
   }
 
@@ -97,7 +104,9 @@ export default class ClimatologyView extends React.Component<any, any> {
         </Map>
 
         <SideBar open={this.state.open} ref={this.sideBar}>
-
+          <If condition={Boolean(this.state.current)}>
+            <ClimatologyDetailsTable data={this.state.current}/>
+          </If>
         </SideBar>
       </>
     )

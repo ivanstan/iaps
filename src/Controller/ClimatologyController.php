@@ -27,13 +27,16 @@ class ClimatologyController extends AbstractController
     }
 
     #[Route("/data/{source}")]
-    public function getPointData(Request $request): JsonResponse
+    public function getPointData(string $source, Request $request): JsonResponse
     {
-        (float)$request->get('latitude');
-        (float)$request->get('longitude');
-
-        dd(1);
-
-        return new JsonResponse([]);
+        return new JsonResponse(
+            $this->normalizer->normalize(
+              $this->repository->getNeareast(
+                  $source,
+                  (float)$request->get('latitude'),
+                  (float)$request->get('longitude'),
+              )
+            )
+        );
     }
 }
