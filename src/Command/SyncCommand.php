@@ -17,6 +17,7 @@ class SyncCommand extends Command
     {
         $this->getApplication()->find('sync:map')->run(new ArrayInput([]), $output);
         $this->getApplication()->find('sync:graph')->run(new ArrayInput([]), $output);
+        $this->getApplication()->find('sync:climatology')->run(new ArrayInput([]), $output);
 
         return self::SUCCESS;
     }
