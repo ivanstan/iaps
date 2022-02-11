@@ -8,7 +8,7 @@ use App\Entity\Fields\SourceReference;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\SourceDataObjectRepository")
  * @ORM\Table(name="`source_data_object`",indexes={
  *     @ORM\Index(name="source_idx", columns={"source_id", "latitude", "longitude"})
  * })

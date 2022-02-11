@@ -16,7 +16,7 @@ class ImportClimatologyService extends AbstractImportService
         $handle = $this->openFile($file);
 
         $row = 0;
-        while (($data = fgetcsv($handle, 100000000, ',')) !== false) {
+        while (($data = fgetcsv($handle, 10000, ',')) !== false) {
             $entity = new SourceDataObject();
             $entity->setLatitude($data[0]);
             $entity->setLongitude($data[1]);
