@@ -23,3 +23,5 @@ doctrine:
                 cos: DoctrineExtensions\Query\Mysql\Cos
                 sin: DoctrineExtensions\Query\Mysql\Sin
                 round: DoctrineExtensions\Query\Mysql\Round
+            string_functions:
+                JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonExtract

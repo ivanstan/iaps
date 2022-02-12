@@ -21,7 +21,7 @@ export default class ClimatologyView extends React.Component<any, any> {
     open: false,
     position: null,
     map: [],
-    radius: 11,
+    radius: 14,
     zoom: 8,
     current: null,
   }

@@ -16,6 +16,7 @@
         "mjaschen/phpgeo": "^3.2",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "scienta/doctrine-json-functions": "^5.0",
         "symfony/apache-pack": "^1.0",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
@@ -33,7 +34,12 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {
