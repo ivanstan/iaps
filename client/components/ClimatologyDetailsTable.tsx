@@ -14,8 +14,6 @@ export class ClimatologyDetailsTable extends React.Component<any, any> {
   render() {
     const {value} = this.props.data
 
-    console.log(value)
-
     return <>
       <Table>
         <thead>

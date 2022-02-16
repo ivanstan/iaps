@@ -58,8 +58,6 @@ export default class ClimatologyView extends React.Component<any, any> {
   onZoomChange = (meterPerPixel: number) => {
     const {info} = this.state
 
-    console.log(info?.resolution);
-
     this.setState({
       radius: info?.resolution / meterPerPixel
     })
@@ -109,6 +107,7 @@ export default class ClimatologyView extends React.Component<any, any> {
               radius: this.state.radius,
               opacity: .4,
               data: this.state.map,
+              maxIntensity: this.state.info.maxValue,
               gradient: this.color.getGradient(),
             }}
           />
@@ -137,7 +136,6 @@ export default class ClimatologyView extends React.Component<any, any> {
               <MenuItem value={'avg_oct'}>Oktobar</MenuItem>
               <MenuItem value={'avg_nov'}>Novembar</MenuItem>
               <MenuItem value={'avg_dec'}>Decembar</MenuItem>
-
             </Select>
           </FormControl>
 

@@ -119,9 +119,11 @@ class SourceDataObjectRepository extends ServiceEntityRepository
         $builder->join('data.source', 'source');
         $builder->where('source.name = :source')->setParameter('source', $source);
 
+        $info = $this->getEntityManager()->getRepository(Source::class)->getSource($source);
+
         return [
             'data' => $builder->getQuery()->getArrayResult(),
-            'info' => $this->getEntityManager()->getRepository(Source::class)->getSource($source),
+            'info' => $info,
         ];
     }
 
