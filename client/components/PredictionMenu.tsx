@@ -3,19 +3,19 @@ import {Button, Menu, MenuItem} from "@material-ui/core";
 import {ExpandMore} from "@material-ui/icons";
 
 export function PredictionMenu() {
-  const [prognosisMenu, setPrognosisMenu] = React.useState(null);
-  const [climatologyMenu, setClimatologyMenu] = React.useState(null);
+  const [prognosisMenu, setPrognosisMenu] = React.useState(null)
+  const [climatologyMenu, setClimatologyMenu] = React.useState(null)
 
-  const prognosisOpen = Boolean(prognosisMenu);
-  const climatologyOpen = Boolean(climatologyMenu);
+  const prognosisOpen = Boolean(prognosisMenu)
+  const climatologyOpen = Boolean(climatologyMenu)
 
   const handleClosePrognosis = () => {
-    setPrognosisMenu(null);
-  };
+    setPrognosisMenu(null)
+  }
 
   const handleCloseClimatology = () => {
-    setClimatologyMenu(null);
-  };
+    setClimatologyMenu(null)
+  }
 
   return (
     <>
@@ -65,9 +65,9 @@ export function PredictionMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/mtm">Srednje temperature</MenuItem>
-        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/mrr">Padavine</MenuItem>
+        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mtm">Srednje temperature</MenuItem>
+        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mrr">Padavine</MenuItem>
       </Menu>
     </>
-  );
+  )
 }

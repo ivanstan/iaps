@@ -141,6 +141,6 @@ class SourceDataObjectRepository extends ServiceEntityRepository
         $builder->orderBy('distance', 'ASC');
         $builder->setMaxResults(1);
 
-        return $builder->getQuery()->getArrayResult()[0];
+        return $builder->getQuery()->getArrayResult()[0] ?? null;
     }
 }
