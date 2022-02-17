@@ -101,12 +101,12 @@ export class ClimatologyDetailsTable extends React.Component<any, any> {
         </tr>
         <tr>
           <th>Avgust</th>
-          <td>{value['avg_aug']}</td>
-          <td>{value['med_aug']}</td>
-          <td>{value['p25_aug']}</td>
-          <td>{value['p75_aug']}</td>
-          <td>{value['p10_aug']}</td>
-          <td>{value['p90_aug']}</td>
+          <td>{value['avg_avg']}</td>
+          <td>{value['med_avg']}</td>
+          <td>{value['p25_avg']}</td>
+          <td>{value['p75_avg']}</td>
+          <td>{value['p10_avg']}</td>
+          <td>{value['p90_avg']}</td>
         </tr>
         <tr>
           <th>Septembar</th>

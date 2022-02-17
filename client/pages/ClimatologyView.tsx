@@ -142,7 +142,7 @@ export default class ClimatologyView extends React.Component<any, any> {
               <MenuItem value={'avg_may'}>Maj</MenuItem>
               <MenuItem value={'avg_jun'}>Jun</MenuItem>
               <MenuItem value={'avg_jul'}>Jul</MenuItem>
-              <MenuItem value={'avg_aug'}>Avgust</MenuItem>
+              <MenuItem value={'avg_avg'}>Avgust</MenuItem>
               <MenuItem value={'avg_sep'}>Septembar</MenuItem>
               <MenuItem value={'avg_oct'}>Oktobar</MenuItem>
               <MenuItem value={'avg_nov'}>Novembar</MenuItem>
