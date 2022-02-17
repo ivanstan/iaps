@@ -55,6 +55,12 @@ class SideBar extends React.Component<any, any> {
     }
   }
 
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    this.setState({
+      isOpen: nextProps.open
+    })
+  }
+
   open = (isOpen: boolean = true) => {
     this.setState({ isOpen: isOpen })
   }

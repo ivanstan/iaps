@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const Table = styled.table`
   font-size: 12px;
+  margin-top: 30px;
   
   tbody tr:nth-child(odd) {
     background: rgba(96, 125, 139, 0.5);

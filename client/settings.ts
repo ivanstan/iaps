@@ -1,5 +1,5 @@
 export const settings = {
-  api: 'http://localhost:8000',
+  api: 'https://dev.ivanstanojevic.me',
 }
 
 export const defaultPosition = {

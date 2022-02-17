@@ -4,11 +4,11 @@ import HeatmapLayer from "react-google-maps/lib/components/visualization/Heatmap
 import SideBar from "../components/SideBar";
 import {ColorUtil} from "../services/ColorUtil";
 import {ClimatologyService} from "../services/ClimatologyService";
-import {mapCenter, meterPerPixel} from "../services/util";
+import {getLegendStep, mapCenter, meterPerPixel} from "../services/util";
 import {If} from "react-if";
 import {ClimatologyDetailsTable} from "../components/ClimatologyDetailsTable";
 import {FormControl, MenuItem, Select} from "@material-ui/core";
-import {PageLoader} from "../components/PageLoader";
+import Legend from "../components/Legend";
 
 export default class ClimatologyView extends React.Component<any, any> {
 
@@ -26,6 +26,7 @@ export default class ClimatologyView extends React.Component<any, any> {
     radius: 0,
     zoom: 8,
     current: null,
+    params: []
   }
 
   constructor(props: any) {
@@ -33,16 +34,27 @@ export default class ClimatologyView extends React.Component<any, any> {
 
     this.sideBar = React.createRef()
     this.service = new ClimatologyService()
+    this.state.source = this.props.match.params.source;
   }
 
   componentDidMount = async () => {
     await this.onChange()
   }
 
+  shouldComponentUpdate(nextProps: Readonly<any>, nextState: Readonly<any>, nextContext: any): boolean {
+    return this.state.params !== nextProps.match.params;
+  }
+
+  componentWillReceiveProps(nextProps: Readonly<any>, nextContext: any) {
+    this.setState({
+      source: nextProps.match.params.source
+    }, this.onChange)
+  }
+
   onChange = async () => {
     this.color = new ColorUtil(this.props.match.params.source, 100)
 
-    let response: any = (await this.service.getMap(this.props.match.params.source, this.state.subSource));
+    let response: any = (await this.service.getMap(this.state.source, this.state.subSource));
 
     this.setState({
       info: response.info,
@@ -88,14 +100,13 @@ export default class ClimatologyView extends React.Component<any, any> {
 
   render() {
     if (!this.color) {
-      return <PageLoader/>
+      return null
     }
+
+    let step = getLegendStep(this.state.source);
 
     return (
       <>
-        <If condition={this.state.map.length === 0}>
-          <PageLoader/>
-        </If>
         <Map containerElement={<div style={{height: window.innerHeight - 64, width: '100%'}}/>}
              mapElement={<div style={{height: '100%'}}/>}
              onZoomChange={this.onZoomChange}
@@ -142,6 +153,16 @@ export default class ClimatologyView extends React.Component<any, any> {
           <If condition={Boolean(this.state.current)}>
             <ClimatologyDetailsTable data={this.state.current}/>
           </If>
+
+          <div style={{flexGrow: 1}}/>
+
+          <If condition={this.state.position}>
+            <span className={'current-position'}>
+              {`Izabrana lokacija: ${this.state.position?.lat.toFixed(2)}°, ${this.state.position?.lng.toFixed(2)}°`}
+            </span>
+          </If>
+
+          <Legend maxIntensity={this.state.info.maxValue} gradient={this.color.getGradient()} step={step}/>
         </SideBar>
       </>
     )
