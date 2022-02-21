@@ -151,7 +151,7 @@ export default class ClimatologyView extends React.Component<any, any> {
           </FormControl>
 
           <If condition={Boolean(this.state.current)}>
-            <ClimatologyDetailsTable data={this.state.current}/>
+            <ClimatologyDetailsTable data={this.state.current} unit={this.state.info.unit}/>
           </If>
 
           <div style={{flexGrow: 1}}/>

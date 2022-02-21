@@ -19,7 +19,7 @@ export class ClimatologyDetailsTable extends React.Component<any, any> {
       <Table>
         <thead>
         <tr>
-          <th/>
+          <th>{this.props.unit}</th>
           <th>Srednja vrednost</th>
           <th>Najverovatnija vrednost (medijana)</th>
           <th colSpan={2}>Najverovatniji opseg vrednosti</th>
