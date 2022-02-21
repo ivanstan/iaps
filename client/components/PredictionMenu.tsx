@@ -5,9 +5,11 @@ import {ExpandMore} from "@material-ui/icons";
 export function PredictionMenu() {
   const [prognosisMenu, setPrognosisMenu] = React.useState(null)
   const [climatologyMenu, setClimatologyMenu] = React.useState(null)
+  const [helpMenu, setHelpMenu] = React.useState(null)
 
   const prognosisOpen = Boolean(prognosisMenu)
   const climatologyOpen = Boolean(climatologyMenu)
+  const helpOpen = Boolean(helpMenu)
 
   const handleClosePrognosis = () => {
     setPrognosisMenu(null)
@@ -15,6 +17,10 @@ export function PredictionMenu() {
 
   const handleCloseClimatology = () => {
     setClimatologyMenu(null)
+  }
+
+  const handleCloseHelp = () => {
+    setHelpMenu(null)
   }
 
   return (
@@ -65,8 +71,31 @@ export function PredictionMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mtm">Srednje temperature</MenuItem>
+        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mtm">Srednje
+          temperature</MenuItem>
         <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mrr">Padavine</MenuItem>
+      </Menu>
+
+      <Button
+        id="basic-button"
+        aria-controls={helpOpen ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={helpOpen ? 'true' : undefined}
+        onClick={(event: any) => setHelpMenu(event.currentTarget)}
+        endIcon={<ExpandMore/>}
+      >
+        Pomoć
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={helpMenu}
+        open={helpOpen}
+        onClose={handleCloseHelp}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem component="a" onClick={handleCloseHelp} href="#/pwa">Mobilna aplikacija</MenuItem>
       </Menu>
     </>
   )
