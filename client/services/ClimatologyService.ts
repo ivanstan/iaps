@@ -2,6 +2,29 @@ import {settings} from "../settings";
 
 export class ClimatologyService {
 
+  getClimTx35 = async () => {
+    let data: any = await fetch(settings.api + '/api/source/sclim_tx35/data');
+
+    data = await data.json();
+
+    let result = []
+    for (let i in data) {
+      if (!data.hasOwnProperty(i)) {
+        continue
+      }
+
+      result.push({
+        location: new google.maps.LatLng(data[i].latitude, data[i].longitude),
+        weight: data[i].value
+      })
+    }
+
+    return {
+      data: result,
+      info: data.info,
+    }
+  }
+
   getMap = async (source: string, subSource: string) => {
     let data: any = await fetch(settings.api + '/api/climatology/map/' + source + '/' + subSource);
 

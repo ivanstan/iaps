@@ -74,6 +74,7 @@ export function PredictionMenu() {
         <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mtm">Srednje
           temperature</MenuItem>
         <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_mrr">Padavine</MenuItem>
+        <MenuItem component="a" onClick={handleCloseClimatology} href="#/climatology/sclim_tx35">Visoke letnje temperature</MenuItem>
       </Menu>
 
       <Button

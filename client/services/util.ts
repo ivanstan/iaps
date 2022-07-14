@@ -38,6 +38,7 @@ export const getLegendStep = (name: string): number => {
     case 'medTX35':
     case 'medT':
     case 'sclim_mtm':
+    case 'sclim_tx35':
       return 5;
     case 'sclim_mrr':
     case 'medP':
