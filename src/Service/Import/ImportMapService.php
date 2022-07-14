@@ -48,6 +48,15 @@ class ImportMapService extends AbstractImportService
     {
         $fileParts = explode('_', $file->getFilenameWithoutExtension());
 
+        if (count($fileParts) === 2) {
+            return [
+                'source' => $file->getFilenameWithoutExtension(),
+                'target_date' => new \DateTime(),
+                'created_date' => new \DateTime(),
+            ];
+        }
+
+
         $createdYear = (int)substr($fileParts[1], 0, 4);
         $createdMonth = (int)substr($fileParts[1], 4, 2) + 1;
 

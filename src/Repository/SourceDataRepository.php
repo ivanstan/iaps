@@ -58,16 +58,22 @@ class SourceDataRepository extends ServiceEntityRepository
         ];
     }
 
-    public function getData(string $name, string $created, string $target): array
+    public function getData(string $name, ?string $created, ?string $target): array
     {
-        return $this->createQueryBuilder('data')
+        $builder = $this->createQueryBuilder('data')
             ->select('data.latitude', 'data.longitude', 'data.value')
             ->leftJoin('data.source', 'source')
-            ->where('source.name = :name')->setParameter('name', $name)
-            ->andWhere('data.createdDate = :created_date')->setParameter('created_date', $created)
-            ->andWhere('data.targetDate = :target_date')->setParameter('target_date', $target)
-            ->getQuery()
-            ->getArrayResult();
+            ->where('source.name = :name')->setParameter('name', $name);
+
+        if ($created) {
+            $builder->andWhere('data.createdDate = :created_date')->setParameter('created_date', $created);
+        }
+
+        if ($target) {
+            $builder->andWhere('data.targetDate = :target_date')->setParameter('target_date', $target);
+        }
+
+        return $builder->getQuery()->getArrayResult();
     }
 
     public function getDetail(string $name, float $latitude, float $longitude, ?string $created, ?string $target): array
