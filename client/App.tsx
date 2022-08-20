@@ -8,12 +8,12 @@ import DateUtils from "@date-io/moment";
 import moment from "moment";
 import {MainMenu} from "./components/MainMenu";
 import styled from "styled-components";
-import {SourceSelect} from "./components/SourceSelect";
 import {GraphPage} from "./pages/GraphPage";
 import {PredictionMenu} from "./components/PredictionMenu";
 import ClimatologyView from "./pages/ClimatologyView";
 import {PwaSupportPage} from "./pages/PwaSupportPage";
 import ClimatologyClimTx35 from "./pages/ClimatologyClimTx35";
+import ClimatologyClimFrost from "./pages/ClimatologyClimFrost";
 
 const theme = createTheme({
   palette: {
@@ -93,6 +93,7 @@ class App extends React.Component<any, any> {
               <Route path="/data/:source" exact component={DataView}/>
               <Route path="/graph/:source" exact component={GraphPage}/>
               <Route path="/climatology/sclim_tx35" exact component={ClimatologyClimTx35}/>
+              <Route path="/climatology/sclim_frost" exact component={ClimatologyClimFrost}/>
               <Route path="/climatology/:source" exact component={ClimatologyView}/>
               <Route path="/pwa" exact component={PwaSupportPage}/>
             </Switch>

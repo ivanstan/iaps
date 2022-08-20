@@ -2,8 +2,8 @@ import {settings} from "../settings";
 
 export class ClimatologyService {
 
-  getClimTx35 = async () => {
-    let data: any = await fetch(settings.api + '/api/source/sclim_tx35/data');
+  getClimatologyMap = async (source: string) => {
+    let data: any = await fetch(settings.api + '/api/source/' + source + '/data');
 
     data = await data.json();
 

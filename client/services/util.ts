@@ -33,6 +33,8 @@ export const getSourceNameFromUrl = () => {
 
 export const getLegendStep = (name: string): number => {
   switch (name) {
+    case 'sclim_frost':
+      return 40;
     case 'medFROST':
     case 'medRX20':
     case 'medTX35':

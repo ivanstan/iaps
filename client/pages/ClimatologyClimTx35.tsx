@@ -40,7 +40,7 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
   }
 
   onChange = async () => {
-    let response: any = (await this.service.getClimTx35());
+    let response: any = (await this.service.getClimatologyMap(this.state.source));
 
     this.setState({
       radius: this.state.info.resolution / meterPerPixel(this.state.zoom, mapCenter.lat),

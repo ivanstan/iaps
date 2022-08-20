@@ -23,6 +23,8 @@ class SyncBlobCommand extends AbstractSyncCommand
 
         foreach ($files as $file) {
             if (!$this->service->isImported($file)) {
+                $output->write(sprintf('Importing %s', $file->getFilename()));
+
                 $this->service->import($file);
             }
         }
