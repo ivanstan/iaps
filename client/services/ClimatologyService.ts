@@ -48,14 +48,35 @@ export class ClimatologyService {
     }
   }
 
-  async getPoint(source: string, postion: any) {
+  async getPoint(source: string, position: any) {
     let params = new URLSearchParams({
-      latitude: postion.lat,
-      longitude: postion.lng,
+      latitude: position.lat,
+      longitude: position.lng,
     })
 
     let data: any = await fetch(settings.api + '/api/climatology/data/' + source + '?' + params.toString());
 
     return await data.json();
+  }
+
+  async getPointMultiple(sources: string[], position: any) {
+
+    const promises = [];
+
+    for (let i in sources) {
+      if (!sources.hasOwnProperty(i)) {
+        continue
+      }
+      let params = new URLSearchParams({
+        latitude: position.lat,
+        longitude: position.lng,
+      })
+
+      let data: any = await fetch(settings.api + '/api/climatology/data/' + sources[i] + '?' + params.toString());
+
+      promises.push(data.json());
+    }
+
+    return Promise.all(promises);
   }
 }

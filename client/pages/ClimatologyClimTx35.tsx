@@ -5,7 +5,7 @@ import {ColorUtil} from "../services/ColorUtil";
 import {ClimatologyService} from "../services/ClimatologyService";
 import {getLegendStep, mapCenter, meterPerPixel} from "../services/util";
 import SideBar from "../components/SideBar";
-import {FormControl} from "@material-ui/core";
+import {CircularProgress, FormControl} from "@material-ui/core";
 import {If} from "react-if";
 import Legend from "../components/Legend";
 
@@ -16,6 +16,7 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
   private service: ClimatologyService;
 
   state: any = {
+    loading: true,
     position: null,
     source: 'sclim_tx35',
     map: [],
@@ -25,6 +26,7 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
       maxValue: 30,
       resolution: 16000,
     },
+    table: null,
   }
 
   constructor(props: any) {
@@ -53,10 +55,18 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
   }
 
   onClick = async (latLng: any) => {
-    this.setState({
+    await this.setState({
       position: latLng,
       open: true,
+      loading: true,
     })
+
+    const result = await this.service.getPointMultiple(['clim_3xtx35', 'clim_rsk3xtx35', 'clim_tx35'], latLng)
+
+    this.setState({
+      loading: false,
+      table: result,
+    });
   }
 
   onZoomChange = (meterPerPixel: number) => {
@@ -91,6 +101,10 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
 
         <SideBar open={this.state.open} ref={this.sideBar}>
           <FormControl fullWidth>
+            <If condition={this.state.loading}>
+              <CircularProgress style={{margin: 'auto'}}/>
+            </If>
+
 
           </FormControl>
 

@@ -5,7 +5,7 @@ import {ColorUtil} from "../services/ColorUtil";
 import {ClimatologyService} from "../services/ClimatologyService";
 import {getLegendStep, mapCenter, meterPerPixel} from "../services/util";
 import SideBar from "../components/SideBar";
-import {FormControl} from "@material-ui/core";
+import {CircularProgress, FormControl} from "@material-ui/core";
 import {If} from "react-if";
 import Legend from "../components/Legend";
 
@@ -16,6 +16,7 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
   private service: ClimatologyService;
 
   state: any = {
+    loading: true,
     position: null,
     source: 'sclim_frost',
     map: [],
@@ -25,6 +26,7 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
       maxValue: 350,
       resolution: 17000,
     },
+    table: null,
   }
 
   constructor(props: any) {
@@ -56,7 +58,15 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
     this.setState({
       position: latLng,
       open: true,
+      loading: true,
     })
+
+    const result = await this.service.getPointMultiple(['clim_frost', 'clim_frsks', 'clim_tn0'], latLng)
+
+    this.setState({
+      loading: false,
+      table: result,
+    });
   }
 
   onZoomChange = (meterPerPixel: number) => {
@@ -91,6 +101,10 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
 
         <SideBar open={this.state.open} ref={this.sideBar}>
           <FormControl fullWidth>
+            <If condition={this.state.loading}>
+              <CircularProgress style={{margin: 'auto'}}/>
+            </If>
+
 
           </FormControl>
 
