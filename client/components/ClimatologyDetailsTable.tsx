@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Table = styled.table`
+export const Table = styled.table`
   font-size: 12px;
   margin-top: 30px;
   

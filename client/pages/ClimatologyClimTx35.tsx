@@ -8,6 +8,7 @@ import SideBar from "../components/SideBar";
 import {CircularProgress, FormControl} from "@material-ui/core";
 import {If} from "react-if";
 import Legend from "../components/Legend";
+import {Table} from "../components/ClimatologyDetailsTable";
 
 export default class ClimatologyClimTx35 extends React.Component<any, any> {
 
@@ -61,12 +62,21 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
       loading: true,
     })
 
-    const result = await this.service.getPointMultiple(['clim_3xtx35', 'clim_rsk3xtx35', 'clim_tx35'], latLng)
+    let result = null;
 
-    this.setState({
-      loading: false,
-      table: result,
-    });
+    if (this.state.position) {
+      const result = this.service.getPointMultiple(['clim_3xtx35', 'clim_rsk3xtx35', 'clim_tx35'], this.state.position).then((results) => {
+        this.setState({
+          loading: false,
+          table: results,
+        })
+      })
+    } else {
+      this.setState({
+        loading: false,
+        table: null,
+      })
+    }
   }
 
   onZoomChange = (meterPerPixel: number) => {
@@ -79,6 +89,9 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
 
   render() {
     let step = getLegendStep(this.state.source);
+    let { table } = this.state;
+
+    console.log(table);
 
     return (
       <>
@@ -105,6 +118,57 @@ export default class ClimatologyClimTx35 extends React.Component<any, any> {
               <CircularProgress style={{margin: 'auto'}}/>
             </If>
 
+            <If condition={table}>
+              <Table>
+                <thead>
+                <tr>
+                  <th>°C</th>
+                  <th>Srednja vrednost</th>
+                  <th>Najverovatnija vrednost (medijana)</th>
+                  <th colSpan={2}>Najverovatniji opseg vrednosti</th>
+                  <th colSpan={2}>Mogući opseg vrednosti</th>
+                </tr>
+                <tr>
+                  <th/>
+                  <th/>
+                  <th/>
+                  <th>25. percentil</th>
+                  <th>75. percentil</th>
+                  <th>10. percentil</th>
+                  <th>90. percentil</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Broj dana sa Tmax °C &gt;= 35</th>
+                  </tr>
+                  <tr>
+                    <th>Jun</th>
+                  </tr>
+                  <tr>
+                    <th>Jul</th>
+                  </tr>
+                  <tr>
+                    <th>Avgust</th>
+                  </tr>
+                  <tr>
+                    <th>Ukupno</th>
+                  </tr>
+                  <tr>
+
+                  </tr>
+                  <tr>
+                    <th>Datum prvog toplog talasa</th>
+                  </tr>
+                  <tr>
+                    <th>Datum poslednjeg toplog talasa</th>
+                  </tr>
+                  <tr>
+                    <th>Dužina perioda u kom se javljaju topli talasi</th>
+                  </tr>
+                </tbody>
+              </Table>
+            </If>
 
           </FormControl>
 

@@ -72,11 +72,19 @@ export class ClimatologyService {
         longitude: position.lng,
       })
 
-      let data: any = await fetch(settings.api + '/api/climatology/data/' + sources[i] + '?' + params.toString());
+      let data: any = fetch(settings.api + '/api/climatology/data/' + sources[i] + '?' + params.toString());
 
-      promises.push(data.json());
+      promises.push(data);
     }
 
-    return Promise.all(promises);
+    const result = await Promise.all(promises);
+    const rval:any = {};
+
+    for (let i in result) {
+      let data = await result[i].json();
+      rval[data.name] = data;
+    }
+
+    return rval;
   }
 }

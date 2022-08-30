@@ -8,6 +8,7 @@ import SideBar from "../components/SideBar";
 import {CircularProgress, FormControl} from "@material-ui/core";
 import {If} from "react-if";
 import Legend from "../components/Legend";
+import {Table} from "../components/ClimatologyDetailsTable";
 
 export default class ClimatologyClimFrost extends React.Component<any, any> {
 
@@ -61,12 +62,21 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
       loading: true,
     })
 
-    const result = await this.service.getPointMultiple(['clim_frost', 'clim_frsks', 'clim_tn0'], latLng)
+    let result = null;
 
-    this.setState({
-      loading: false,
-      table: result,
-    });
+    if (this.state.position) {
+      const result = this.service.getPointMultiple(['clim_frost', 'clim_frsks', 'clim_tn0'], this.state.position).then(results => {
+        this.setState({
+          loading: false,
+          table: results,
+        })
+      })
+    } else {
+      this.setState({
+        loading: false,
+        table: null,
+      })
+    }
   }
 
   onZoomChange = (meterPerPixel: number) => {
@@ -79,6 +89,9 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
 
   render() {
     let step = getLegendStep(this.state.source);
+    let { table } = this.state;
+
+    console.log(table);
 
     return (
       <>
@@ -105,7 +118,90 @@ export default class ClimatologyClimFrost extends React.Component<any, any> {
               <CircularProgress style={{margin: 'auto'}}/>
             </If>
 
-
+            <If condition={table}>
+              <Table>
+                <thead>
+                <tr>
+                  <th>°C</th>
+                  <th>Srednja vrednost</th>
+                  <th>Najverovatnija vrednost (medijana)</th>
+                  <th colSpan={2}>Najverovatniji opseg vrednosti</th>
+                  <th colSpan={2}>Mogući opseg vrednosti</th>
+                </tr>
+                <tr>
+                  <th/>
+                  <th/>
+                  <th/>
+                  <th>25. percentil</th>
+                  <th>75. percentil</th>
+                  <th>10. percentil</th>
+                  <th>90. percentil</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Broj dana sa Tmin&lt; 0°C</th>
+                  </tr>
+                  <tr>
+                    <th>Mart</th>
+                  </tr>
+                  <tr>
+                    <th>April</th>
+                  </tr>
+                  <tr>
+                    <th>Maj</th>
+                  </tr>
+                  <tr>
+                    <th>Ukupno</th>
+                  </tr>
+                  <tr/>
+                  <tr/>
+                  <tr>
+                    <th>Datum poslednjeg prolećnog mraza</th>
+                  </tr>
+                  <tr>
+                    <th>Datum prvog jesenjeg mraza</th>
+                  </tr>
+                  <tr>
+                    <th>Dužina bezmraznog perioda</th>
+                  </tr>
+                  <tr/>
+                  <tr/>
+                  <tr>
+                    <th colSpan={2}/>
+                    <th>RIZIK %</th>
+                    <th>KATEGORIJA</th>
+                    <th/>
+                    <th>RIZIK %</th>
+                    <th>KATEGORIJA</th>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}>kajsija, breskva</th>
+                    <td></td>
+                    <td></td>
+                    <th>kukuruz</th>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}>trešnje, višnje, šljive, vinova loza</th>
+                    <td></td>
+                    <td></td>
+                    <th>šećerna repa</th>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th colSpan={2}>jabuke, kruške, dunje</th>
+                    <td></td>
+                    <td></td>
+                    <th>soja</th>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </Table>
+            </If>
           </FormControl>
 
           <div style={{flexGrow: 1}}/>

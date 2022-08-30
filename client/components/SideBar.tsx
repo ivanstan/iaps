@@ -17,7 +17,7 @@ const Container = styled.div`
   overflow-x: hidden;
 `;
 
-const drawerWidth = 440;
+const drawerWidth = 480;
 
 const Content = styled.div`
   padding: 20px;
